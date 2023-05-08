@@ -8,51 +8,51 @@ generator client {
   provider = "prisma-client-js"
 }
 
-model User {
-  id             String           @id @default(cuid())
+model user {
+  id             String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   email          String           @unique
   name           String?
   phone          String?          @unique
   active         Boolean          @default(true)
-  Social_events  Social_event[]
-  Social_booking Social_booking[]
+  Social_events  social_event[]
+  Social_booking social_booking[]
   wechatId       String?
   created_at     DateTime         @default(now())
   updated_at     DateTime         @default(now()) @updatedAt
-  Organization   Organization[]
+  Organization   organization[]
 }
 
-model Organization {
+model organization {
   id       Int     @id @default(autoincrement())
   name     String  @unique
-  owner    User    @relation(fields: [userId], references: [id])
+  owner    user    @relation(fields: [userId], references: [id])
   wechatId String
   phone    String? @unique
-  userId   String
+  userId   String  @db.Uuid
 }
 
-model Social_event {
+model social_event {
   id             Int              @id @default(autoincrement())
   name           String
   address        String
   venue_name     String
   date           DateTime         @db.Timestamp(0)
-  owner          User?            @relation(fields: [ownerId], references: [id])
-  ownerId        String
+  owner          user?            @relation(fields: [ownerId], references: [id])
+  ownerId        String           @db.Uuid
   booking_groups Json
   created_at     DateTime         @default(now())
   updated_at     DateTime         @default(now()) @updatedAt
-  Social_booking Social_booking[]
+  Social_booking social_booking[]
 }
 
-model Social_booking {
+model social_booking {
   id              Int          @id @default(autoincrement())
-  Social_events   Social_event @relation(fields: [social_eventsId], references: [id])
-  User            User         @relation(fields: [userId], references: [id])
+  social_events   social_event @relation(fields: [social_eventsId], references: [id])
+  user            user         @relation(fields: [userId], references: [id])
   created_at      DateTime     @default(now())
   updated_at      DateTime     @default(now()) @updatedAt
   social_eventsId Int
-  userId          String
+  userId          String       @db.Uuid
 }
 
 model payments {
