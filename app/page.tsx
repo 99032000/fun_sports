@@ -5,13 +5,13 @@ import { Inter } from "next/font/google";
 import { headers, cookies } from "next/headers";
 import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { useState, useEffect } from "react";
+import type { Social_booking } from "@prisma/client";
 const inter = Inter({ subsets: ["latin"] });
-export const revalidate = 0;
 
 export default function Home() {
   const [supabase] = useState(() => createBrowserSupabaseClient());
   const auth = supabase.auth;
-  const [post, setPost] = useState([]);
+  const [post, setPost] = useState<Social_booking[]>([]);
   useEffect(() => {
     const fetchPosts = async () => {
       const data = await fetch("/api/posts");

@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "prisma migrate": "npx prisma migrate dev --name init"
   },
   "dependencies": {
     "@prisma/client": "4.13.0",
@@ -19,10 +20,10 @@
     "encoding": "^0.1.13",
     "eslint": "8.39.0",
     "eslint-config-next": "13.3.4",
-    "next": "13.3.4",
+    "next": "^13.4.1",
     "prisma": "^4.13.0",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "typescript": "5.0.4"
   },
   "devDependencies": {
