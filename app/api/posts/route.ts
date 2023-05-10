@@ -13,9 +13,7 @@ export async function GET(req: Request) {
   });
 
   const auth = await supabase.auth.getUser();
-  console.log(auth);
   const body = req.body;
   const posts = await prisma.social_event.findMany()
-  console.log(body, posts);
   return new Response(JSON.stringify(posts), { status: 200 })
 }

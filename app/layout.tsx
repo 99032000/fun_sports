@@ -1,6 +1,8 @@
 import SupabaseProvider from "@/components/providers/supabase-provider";
+import NavBar from "@/components/navBar/NavBar";
 import "./globals.css";
 import { Inter } from "next/font/google";
+import { Toaster } from "react-hot-toast";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -15,9 +17,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" data-theme="cupcake">
       <SupabaseProvider>
-        <body>{children}</body>
+        <body className=" bg-slate-100">
+            <Toaster />
+          <NavBar />
+          {children}
+        </body>
       </SupabaseProvider>
     </html>
   );
