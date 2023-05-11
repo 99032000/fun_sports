@@ -11,3 +11,10 @@ export const getUserById = async (id: string) => {
   );
   return await response.json();
 }
+
+export const getSportsTypes = async () => {
+  const response = await fetch(
+    `/api/sportsType`
+  );
+  return await response.json();
+}
