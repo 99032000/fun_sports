@@ -1,17 +1,30 @@
 "use client";
 
 import { useSupabase } from "../providers/supabase-provider";
-import type { UserResponse } from "@supabase/supabase-js";
-import { useEffect, useState } from "react";
+import { supabaseClient } from "@/lib/client/supabaseClient";
 import { useSession } from "@supabase/auth-helpers-react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-
-const NavBar = () => {
-  const { supabase } = useSupabase();
-  const session = useSession();
-  console.log(session);
+import type { Session } from "@supabase/supabase-js";
+const NavBar = ({ session }: { session: Session | null }) => {
+  // const { supabase } = useSupabase();
   const titleList = ["Home", "Market", "Contact me"];
+  // const [session, setSession] = useState<Session | null>(null);
+  const { supabase } = useSupabase();
+  useEffect(() => {
+    async function getData() {
+      if (session) {
+        const { user, error }: any = await supabaseClient
+          .from("user")
+          .select("email")
+          .eq("id", session.user.id);
+        console.log(user);
+      }
+    }
+    getData();
+  }, [supabase]);
+
   return (
     <div className="navbar bg-base-100 shadow-xl z-10">
       <div className="navbar-start">
@@ -64,9 +77,13 @@ const NavBar = () => {
         </ul>
       </div>
       <div className="navbar-end">
-        <Link className="btn btn-primary" href="/login">
-          Sign In
-        </Link>
+        {session ? (
+          <> avatar</>
+        ) : (
+          <Link className="btn btn-primary" href="/login">
+            Sign In
+          </Link>
+        )}
       </div>
     </div>
   );

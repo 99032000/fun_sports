@@ -5,6 +5,7 @@ import { z } from "zod";
 import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import toast from "react-hot-toast";
 import { getUserByEmail } from "@/lib/api";
+import { emailSchema, passwordSchema } from "@/utility/ZodFormat";
 const Page = () => {
   // input reference
   const emailRef = useRef<HTMLInputElement>(null);
@@ -39,8 +40,6 @@ const Page = () => {
   };
 
   // validate rules
-  const emailSchema = z.string().email({ message: "Invalid Email address" });
-  const passwordSchema = z.string().min(6);
 
   // handler submit function button
   const handleSubmit = (e: any) => {

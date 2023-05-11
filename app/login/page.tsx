@@ -1,13 +1,49 @@
 "use client";
 import { useState, useRef, ButtonHTMLAttributes } from "react";
 import { useRouter } from "next/navigation";
+import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
+import { emailSchema, passwordSchema } from "@/utility/ZodFormat";
+import toast from "react-hot-toast";
 const Page = () => {
   const emailRef = useRef<HTMLInputElement | null>(null);
   const passwordRef = useRef<HTMLInputElement | null>(null);
+  const [supabase] = useState(() => createBrowserSupabaseClient());
+  // auth variables
+  const session = supabase.auth.getSession();
+  const auth = supabase.auth;
   const router = useRouter();
-  const signUp = (e: { preventDefault: () => void }) => {
+  const handleSignUp = (e: { preventDefault: () => void }) => {
     e.preventDefault();
     router.push("/signup");
+  };
+
+  const handleSignIn = async (e: { preventDefault: () => void }) => {
+    e.preventDefault();
+    const email = emailRef.current?.value;
+    const password = passwordRef.current?.value;
+    // if no email or password, return
+    if (!email || !password) return;
+    // check if email is valid and password is valid
+    if (!emailSchema.safeParse(email).success) {
+      toast.error("Email is not valid");
+      return;
+    }
+
+    if (!passwordSchema.safeParse(password).success) {
+      toast.error("Password is not valid");
+      return;
+    }
+
+    const result = await auth.signInWithPassword({
+      email: email,
+      password: password,
+    });
+    console.log(result);
+    if (result.error) {
+      toast.error(result.error.message);
+      return;
+    }
+    router.replace("/");
   };
   return (
     <div className="relative flex flex-col justify-center h-screen overflow-hidden bg-primary p-4">
@@ -42,10 +78,15 @@ const Page = () => {
             Forget Password?
           </button>
           <div className=" mt-8">
-            <button className="btn btn-primary btn-block">Login</button>
+            <button
+              className="btn btn-primary btn-block"
+              onClick={handleSignIn}
+            >
+              Login
+            </button>
             <button
               className="btn btn-secondary btn-block mt-4"
-              onClick={signUp}
+              onClick={handleSignUp}
             >
               Sign Up
             </button>
