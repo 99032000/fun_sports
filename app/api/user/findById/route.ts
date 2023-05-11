@@ -3,7 +3,7 @@ import prisma from "@/lib/client/prismaClient";
 import type { NextRequest, NextResponse } from 'next/server';
 import { headers, cookies } from 'next/headers'
 
-export const revalidate = 0;
+export const revalidate = 60 * 60 * 2;
 
 
 export async function GET(req: NextRequest, res: NextResponse) {
