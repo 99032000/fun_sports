@@ -8,7 +8,12 @@ export const revalidate = 0;
  *  body structure is  {
  *   id: 1,
  *   userInfo: {}
- *   hobbies: []
+ *   hobbies: [
+ *   {          
+ *   sports_typeId: 1,
+ *   level: 1,
+ *  }
+ * ]
  * }
  * 
  */
@@ -47,6 +52,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
         data: userInfo
       });
     } catch (e) {
+      console.error(e, "userinfo update error");
       return new Response(JSON.stringify({
         success: false,
         error: "something went wrong when updating user"
@@ -55,20 +61,43 @@ export async function POST(req: NextRequest, res: NextResponse) {
   }
   // if hobbies is not empty then update the hobbies
   if (hobbies && hobbies.length > 0) {
+    const hobbies_data = hobbies.map((item) => ({
+      "sports_typeId": item.sports_typeId,
+      "level": item.level,
+      "userId": userId
+    }))
     try {
-      const response = await prisma.hobby.createMany({
-        data: hobbies.map((item) => ({
-          "sports_typeId": item.sports_typeId,
-          "level": item.level,
-          "userId": userId
-        }))
+      // create the hobbies update or create the hobbies promise
+      const upsertPromises = hobbies_data.map((item) => {
+        return prisma.hobby.upsert({
+          create: {
+            sports_typeId: item.sports_typeId,
+            level: item.level,
+            userId: userId
+          }
+          , update: {
+            level: item.level,
+          },
+          where: {
+            sports_typeId_userId: {
+              sports_typeId: item.sports_typeId,
+              userId: userId
+            }
+          }
+        });
       });
+      // resolve the promise
+      const response = await Promise.all(upsertPromises);
     } catch (e) {
+      console.error(e, "hobbies update error");
       return new Response(JSON.stringify({
         success: false,
         error: "something went wrong when creating hobbies"
       }), { status: 400 });
     }
   };
+  return new Response(JSON.stringify({
+    success: true
+  }), { status: 200 });
 }
 
