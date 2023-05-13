@@ -1,3 +1,19 @@
+export type updateUserBody = {
+  userId: string;
+  userInfo: {
+    name?: string;
+    phone?: string;
+    wechatId?: string;
+  };
+  hobbies: hobby_type[]
+}
+
+export type hobby_type = {
+  sports_typeId: number;
+  sports_name: string;
+  level: number;
+};
+
 export const getUserByEmail = async (email: string) => {
   const response = await fetch(
     `/api/user/findByEmail?` + new URLSearchParams({ email })
@@ -16,5 +32,13 @@ export const getSportsTypes = async () => {
   const response = await fetch(
     `/api/sportsType`
   );
+  return await response.json();
+}
+
+export const updateUser = async (body: any) => {
+  const response = await fetch("/api/user/updateUser", {
+    method: "POST",
+    body: JSON.stringify(body),
+  });
   return await response.json();
 }

@@ -8,12 +8,9 @@ import { emailSchema, passwordSchema } from "@/utility/ZodFormat";
 import type { sports_type } from "@prisma/client";
 import SportsLevel from "./SportsLevelSelector";
 import { AiOutlinePlus } from "react-icons/ai";
-
-export type hobby_type = {
-  sports_typeId: number;
-  sports_name: string;
-  level: number;
-};
+import { updateUser } from "@/lib/api";
+import type { updateUserBody, hobby_type } from "@/lib/api";
+import { useRouter } from "next/navigation";
 
 const Page = ({ sports_types }: { sports_types: sports_type[] }) => {
   // input reference
@@ -26,7 +23,7 @@ const Page = ({ sports_types }: { sports_types: sports_type[] }) => {
   const [warningList, setWarningList] = useState<String[]>([]);
   const [hobbyList, setHobbyList] = useState<hobby_type[]>([]);
   const [supabase] = useState(() => createBrowserSupabaseClient());
-
+  const router = useRouter();
   // auth variables
   // const session = supabase.auth.getSession();
   const auth = supabase.auth;
@@ -44,8 +41,33 @@ const Page = ({ sports_types }: { sports_types: sports_type[] }) => {
       email: email,
       password: password,
     });
+    if (result.error) {
+      setLoading((pre) => !pre);
+      toast.error(result.error.message);
+      console.log(result.error.message);
+      return;
+    }
+    //----------------------------------------------------------------
+
+    console.log(result);
+    const body: updateUserBody = {
+      userId: result.data.user!.id,
+      userInfo: {},
+      hobbies: [],
+    };
+    body.userInfo = { name: nameRef.current!.value };
+    body.hobbies = hobbyList;
+
+    const updateUserResponse = await updateUser(body);
+    if (!updateUserResponse.success) {
+      toast.error(updateUserResponse.error);
+    }
+    console.log(updateUserResponse);
     setLoading((pre) => !pre);
-    toast.success("registered successfully, have fun!");
+    toast.success(
+      "registered successfully, have fun!. Please confirm your email"
+    );
+    router.replace("/login");
   };
 
   // validate rules

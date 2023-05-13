@@ -1,12 +1,13 @@
 import prisma from "@/lib/client/prismaClient";
 
 import type { NextRequest, NextResponse } from 'next/server';
+import type { updateUserBody } from "@/lib/api";
 import { headers, cookies } from 'next/headers'
 
 export const revalidate = 0;
 /**
  *  body structure is  {
- *   id: 1,
+ *   userId: 1,
  *   userInfo: {}
  *   hobbies: [
  *   {          
@@ -17,15 +18,11 @@ export const revalidate = 0;
  * }
  * 
  */
-type Body = {
-  userId: string,
-  userInfo: {},
-  hobbies: { sports_typeId: number, level: number }[]
-}
+
 
 export async function POST(req: NextRequest, res: NextResponse) {
   //get the params from the request
-  const body: Body = await req.json();
+  const body: updateUserBody = await req.json();
   console.log(body);
   const { userId, userInfo, hobbies } = body;
   // check if the id is valid

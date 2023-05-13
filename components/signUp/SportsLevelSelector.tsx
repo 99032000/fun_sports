@@ -1,6 +1,6 @@
 "use client";
 import { Dispatch, SetStateAction } from "react";
-import type { hobby_type } from "./SignUp";
+import type { hobby_type } from "@/lib/api";
 import { SportsLevelName } from "@/utility/Data_defination";
 import { AiFillDelete } from "react-icons/ai";
 const SportsLevel = ({
@@ -21,7 +21,7 @@ const SportsLevel = ({
         if (item.sports_typeId === hobby.sports_typeId) {
           return {
             ...item,
-            level: e.target.value,
+            level: parseInt(e.target.value),
           };
         }
         return item;
