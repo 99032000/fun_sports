@@ -12,7 +12,7 @@ import toast from "react-hot-toast";
 import type { user } from "@prisma/client";
 const NavBar = ({ session }: { session: Session | null }) => {
   const { supabase } = useSupabase();
-  const titleList = ["Home", "Market", "Contact me"];
+  const titleList = ["Home", "Coaching", "Market", "Contact me"];
   const [user, setUser] = useState<user | null>(null);
 
   useEffect(() => {
@@ -89,7 +89,7 @@ const NavBar = ({ session }: { session: Session | null }) => {
         {session ? (
           <div className="dropdown dropdown-bottom dropdown-end cursor-pointer">
             <div className="avatar placeholder" tabIndex={0}>
-              <div className="bg-neutral-focus text-neutral-content rounded-full w-12">
+              <div className=" bg-primary text-white rounded-full w-12 hover:bg-primary-focus">
                 <span className=" text-lg">
                   {user?.name?.charAt(0).toUpperCase()}
                 </span>
