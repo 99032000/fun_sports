@@ -1,8 +1,6 @@
 "use client";
 
 import { useSupabase } from "../providers/supabase-provider";
-import { supabaseClient } from "@/lib/client/supabaseClient";
-import { useSession } from "@supabase/auth-helpers-react";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -17,7 +15,7 @@ const NavBar = ({ session }: { session: Session | null }) => {
 
   useEffect(() => {
     async function getData() {
-      if (session) {
+      if (session?.user.id) {
         const response = await getUserById(session.user.id);
         console.log(response);
         if (response.success) setUser(response.data.user);
@@ -28,7 +26,7 @@ const NavBar = ({ session }: { session: Session | null }) => {
       }
     }
     getData();
-  }, []);
+  }, [session?.user.id]);
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
