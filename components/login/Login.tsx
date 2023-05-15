@@ -79,7 +79,7 @@ const Login = ({ redirectUrl }: { redirectUrl: string | undefined }) => {
             alt="parrot"
           />
         </div>
-        <form className="space-y-4">
+        <div className="space-y-4">
           <div>
             <label className="label">
               <span className="text-base label-text">Email</span>
@@ -122,7 +122,7 @@ const Login = ({ redirectUrl }: { redirectUrl: string | undefined }) => {
               Sign Up
             </button>
           </div>
-        </form>
+        </div>
       </div>
     </div>
   );
