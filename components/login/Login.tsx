@@ -4,7 +4,9 @@ import { useRouter } from "next/navigation";
 import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { emailSchema, passwordSchema } from "@/utility/ZodFormat";
 import toast from "react-hot-toast";
-const Login = () => {
+import Image from "next/image";
+
+const Login = ({ redirectUrl }: { redirectUrl: string | undefined }) => {
   const emailRef = useRef<HTMLInputElement | null>(null);
   const passwordRef = useRef<HTMLInputElement | null>(null);
   const [supabase] = useState(() => createBrowserSupabaseClient());
@@ -43,12 +45,43 @@ const Login = () => {
     }
     router.replace("/");
   };
+  const handleForgotPasswordClick = async (e: {
+    preventDefault: () => void;
+  }) => {
+    e.preventDefault();
+    const email = emailRef.current?.value;
+    // if no email, return
+    if (!email) return;
+    // check if email is valid
+    if (!emailSchema.safeParse(email).success) {
+      toast.error("Email is not valid");
+      return;
+    }
+    console.log(redirectUrl);
+    const result = await auth.resetPasswordForEmail(email, {
+      redirectTo: redirectUrl,
+    });
+    console.log(result);
+    if (result.error) {
+      toast.error(result.error.message);
+      return;
+    }
+    toast.success("Email sent");
+  };
   return (
     <div className="relative flex flex-col justify-center h-screen overflow-hidden bg-primary p-4">
       <div className="w-full p-6 m-auto bg-white rounded-md shadow-md lg:max-w-lg">
-        <h1 className="text-3xl font-semibold text-center text-primary">
-          DaisyUI
-        </h1>
+        <div className="flex gap-4 justify-center">
+          <h1 className="text-3xl font-semibold text-center text-primary">
+            Login
+          </h1>
+          <Image
+            src="/images/bird-parrot.gif"
+            width={36}
+            height={6}
+            alt="parrot"
+          />
+        </div>
         <form className="space-y-4">
           <div>
             <label className="label">
@@ -72,7 +105,10 @@ const Login = () => {
               ref={passwordRef}
             />
           </div>
-          <button className=" text-sm hover:text-secondary btn btn-link p-0">
+          <button
+            className=" text-sm hover:text-secondary btn btn-link p-0"
+            onClick={handleForgotPasswordClick}
+          >
             Forget Password?
           </button>
           <div className=" mt-8">

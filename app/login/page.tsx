@@ -7,7 +7,8 @@ const Page = async () => {
     data: { session },
   } = await supabase.auth.getSession();
   if (session) redirect("/");
-  return <Login />;
+  console.log(process.env.RESET_PASSWORD_URL);
+  return <Login redirectUrl={process.env.RESET_PASSWORD_URL} />;
 };
 
 export default Page;

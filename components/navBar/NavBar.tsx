@@ -7,9 +7,11 @@ import Link from "next/link";
 import type { Session } from "@supabase/supabase-js";
 import { getUserById } from "@/lib/api";
 import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 import type { user } from "@prisma/client";
 const NavBar = ({ session }: { session: Session | null }) => {
   const { supabase } = useSupabase();
+  const router = useRouter();
   const titleList = ["Home", "Coaching", "Market", "Contact me"];
   const [user, setUser] = useState<user | null>(null);
 
@@ -31,6 +33,7 @@ const NavBar = ({ session }: { session: Session | null }) => {
   const handleSignOut = async () => {
     await supabase.auth.signOut();
     toast.success("Logged out successfully");
+    router.refresh();
   };
   return (
     <div className="navbar bg-base-100 shadow-xl z-10">
