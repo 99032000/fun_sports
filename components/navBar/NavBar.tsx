@@ -19,10 +19,8 @@ const NavBar = ({ session }: { session: Session | null }) => {
     async function getData() {
       if (session?.user.id) {
         const response = await getUserById(session.user.id);
-        console.log(response);
         if (response.success) setUser(response.data.user);
         if (response.error) {
-          console.error(response.error);
           toast.error(response.error + "\n 速度联系我!!!我得debug");
         }
       }

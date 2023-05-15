@@ -44,12 +44,10 @@ const Page = ({ sports_types }: { sports_types: sports_type[] }) => {
     if (result.error) {
       setLoading((pre) => !pre);
       toast.error(result.error.message);
-      console.log(result.error.message);
       return;
     }
     //----------------------------------------------------------------
 
-    console.log(result);
     const body: updateUserBody = {
       userId: result.data.user!.id,
       userInfo: {},
@@ -62,7 +60,6 @@ const Page = ({ sports_types }: { sports_types: sports_type[] }) => {
     if (!updateUserResponse.success) {
       toast.error(updateUserResponse.error);
     }
-    console.log(updateUserResponse);
     setLoading((pre) => !pre);
     toast.success(
       "registered successfully, have fun!. Please confirm your email"

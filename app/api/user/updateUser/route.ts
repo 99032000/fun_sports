@@ -23,7 +23,6 @@ export const revalidate = 0;
 export async function POST(req: NextRequest, res: NextResponse) {
   //get the params from the request
   const body: updateUserBody = await req.json();
-  console.log(body);
   const { userId, userInfo, hobbies } = body;
   // check if the id is valid
   if (!userId) {

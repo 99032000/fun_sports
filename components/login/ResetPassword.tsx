@@ -1,18 +1,24 @@
 "use client";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
+import { useSupabase } from "@/components/providers/supabase-provider";
 import { passwordSchema } from "@/utility/ZodFormat";
 import toast from "react-hot-toast";
 const ResetPassword = () => {
   const passwordConfirmRef = useRef<HTMLInputElement | null>(null);
   const passwordRef = useRef<HTMLInputElement | null>(null);
   const [supabase] = useState(() => createBrowserSupabaseClient());
+  const sessionContext = useSupabase().session;
   const [loading, setLoading] = useState(false);
   // auth variables
   const auth = supabase.auth;
   const router = useRouter();
-
+  useEffect(() => {
+    if (!sessionContext) {
+      router.push("/login");
+    }
+  }, [sessionContext, router]);
   const handleResetPassword = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
     if (
@@ -40,8 +46,7 @@ const ResetPassword = () => {
       toast.error("something wrong " + error.message);
       return;
     }
-    // router.push("/");
-    console.log(data);
+    router.push("/");
   };
   return (
     <div className="relative flex flex-col justify-center h-screen overflow-hidden bg-primary p-4">

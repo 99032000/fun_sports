@@ -38,7 +38,6 @@ const Login = ({ redirectUrl }: { redirectUrl: string | undefined }) => {
       email: email,
       password: password,
     });
-    console.log(result);
     if (result.error) {
       toast.error(result.error.message);
       return;
@@ -57,11 +56,9 @@ const Login = ({ redirectUrl }: { redirectUrl: string | undefined }) => {
       toast.error("Email is not valid");
       return;
     }
-    console.log(redirectUrl);
     const result = await auth.resetPasswordForEmail(email, {
       redirectTo: redirectUrl,
     });
-    console.log(result);
     if (result.error) {
       toast.error(result.error.message);
       return;
