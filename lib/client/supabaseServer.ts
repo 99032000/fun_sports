@@ -9,3 +9,10 @@ export const createServerClient = () =>
     headers,
     cookies,
   });
+export const getSession = async () => {
+  const supabase = createServerClient();
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+  return session;
+}

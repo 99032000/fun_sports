@@ -15,7 +15,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
     return new Response(JSON.stringify({
       success: false,
       data: null,
-      error: "did not find email as query param"
+      error: "did not find id as query param"
     }), { status: 400 });
   // get the user from the database
   const user = await prisma.user.findUnique({ where: { id: id[0] } });

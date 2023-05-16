@@ -3,7 +3,8 @@ import NavBar from "@/components/navBar/NavBar";
 import "./globals.css";
 import { Inter } from "next/font/google";
 import { Toaster } from "react-hot-toast";
-import { createServerClient } from "@/lib/client/supabaseServer";
+import { getSession } from "@/lib/client/supabaseServer";
+import prisma from "@/lib/client/prismaClient";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
@@ -16,16 +17,21 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const supabase = createServerClient();
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
+  const session = await getSession();
+  const userId = session?.user.id;
+  const user = session?.user.id
+    ? await prisma.user.findUnique({
+        where: {
+          id: userId,
+        },
+      })
+    : null;
   return (
     <html lang="en" data-theme="cupcake">
       <SupabaseProvider session={session}>
-        <body className=" bg-slate-100">
+        <body className="">
           <Toaster />
-          <NavBar session={session} />
+          <NavBar session={session} user={user} />
           {children}
         </body>
       </SupabaseProvider>

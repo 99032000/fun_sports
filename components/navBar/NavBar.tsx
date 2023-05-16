@@ -7,34 +7,66 @@ import Link from "next/link";
 import type { Session } from "@supabase/supabase-js";
 import { getUserById } from "@/lib/api";
 import toast from "react-hot-toast";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import type { user } from "@prisma/client";
-const NavBar = ({ session }: { session: Session | null }) => {
+const NavBar = ({
+  session,
+  user,
+}: {
+  session: Session | null;
+  user: user | null;
+}) => {
   const { supabase } = useSupabase();
   const router = useRouter();
-  const titleList = ["Home", "Coaching", "Market", "Contact me"];
-  const [user, setUser] = useState<user | null>(null);
+  const pathName = usePathname();
+  const titleList = [
+    { name: "Home", href: "/" },
+    { name: "Coaching", href: "/coaching" },
+    { name: "Market", href: "/market" },
+    { name: "Contact me", href: "/contact-me" },
+  ];
+  const dashboardTitleList = [
+    { name: "Profile", href: "/dashboard/profile" },
+    { name: "Event", href: "/dashboard/event" },
+    { name: "Booking", href: "/booking" },
+  ];
 
-  useEffect(() => {
-    async function getData() {
-      if (session?.user.id) {
-        const response = await getUserById(session.user.id);
-        if (response.success) setUser(response.data.user);
-        if (response.error) {
-          toast.error(response.error + "\n 速度联系我!!!我得debug");
-        }
-      }
-    }
-    getData();
-  }, [session?.user.id]);
+  // useEffect(() => {
+  //   async function getData() {
+  //     console.log("here");
+  //     if (session?.user.id) {
+  //       const response = await getUserById(session.user.id);
+  //       if (response.success) setUser(response.data.user);
+  //       if (response.error) {
+  //         toast.error(response.error + "\n 速度联系我!!!我得debug");
+  //       }
+  //     }
+  //   }
+  //   getData();
+  // }, [session?.user.id]);
+
+  // useEffect(() => {
+  //   if (pathName.startsWith("/dashboard")) setTitles(dashboardTitleList);
+  //   else setTitles(titleList);
+  // }, [pathName, dashboardTitleList, titleList]);
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
     toast.success("Logged out successfully");
     router.refresh();
   };
+
+  const getTitles = () => {
+    let titles = titleList;
+    if (pathName.startsWith("/dashboard")) titles = dashboardTitleList;
+    return titles.map((title, index) => (
+      <li key={index}>
+        <Link href={title.href}>{title.name}</Link>
+      </li>
+    ));
+  };
   return (
-    <div className="navbar bg-base-100 shadow-xl z-10">
+    <div className="navbar bg-base-100 shadow-lg z-10">
       <div className="navbar-start">
         <div className="dropdown">
           <label tabIndex={0} className="btn btn-ghost lg:hidden">
@@ -57,11 +89,7 @@ const NavBar = ({ session }: { session: Session | null }) => {
             tabIndex={0}
             className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
           >
-            {titleList.map((title, index) => (
-              <li key={index}>
-                <Link href="/">{title}</Link>
-              </li>
-            ))}
+            {getTitles()}
           </ul>
         </div>
         <Link className="btn btn-ghost normal-case text-xl" href={"/"}>
@@ -76,13 +104,7 @@ const NavBar = ({ session }: { session: Session | null }) => {
         </Link>
       </div>
       <div className="navbar-center hidden lg:flex">
-        <ul className="menu menu-horizontal px-1">
-          {titleList.map((title, index) => (
-            <li key={index}>
-              <Link href="/">{title}</Link>
-            </li>
-          ))}
-        </ul>
+        <ul className="menu menu-horizontal px-1">{getTitles()}</ul>
       </div>
       <div className="navbar-end">
         {session ? (
@@ -99,7 +121,7 @@ const NavBar = ({ session }: { session: Session | null }) => {
               className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52"
             >
               <li>
-                <a>profiles</a>
+                <Link href={"/dashboard"}>dashboard</Link>
               </li>
               <li>
                 <a>bookings</a>

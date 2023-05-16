@@ -85,9 +85,10 @@ const Login = ({ redirectUrl }: { redirectUrl: string | undefined }) => {
               <span className="text-base label-text">Email</span>
             </label>
             <input
-              type="text"
+              type="email"
               placeholder="Email Address"
               className="w-full input input-bordered input-primary"
+              autoComplete="on"
               ref={emailRef}
             />
           </div>
