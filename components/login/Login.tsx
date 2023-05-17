@@ -5,7 +5,7 @@ import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { emailSchema, passwordSchema } from "@/utility/ZodFormat";
 import toast from "react-hot-toast";
 import Image from "next/image";
-
+import Link from "next/link";
 const Login = ({ redirectUrl }: { redirectUrl: string | undefined }) => {
   const emailRef = useRef<HTMLInputElement | null>(null);
   const passwordRef = useRef<HTMLInputElement | null>(null);
@@ -116,12 +116,11 @@ const Login = ({ redirectUrl }: { redirectUrl: string | undefined }) => {
             >
               Login
             </button>
-            <button
-              className="btn btn-secondary btn-block mt-4"
-              onClick={handleSignUp}
-            >
-              Sign Up
-            </button>
+            <Link href="signup">
+              <button className="btn btn-secondary btn-block mt-4">
+                Sign Up
+              </button>
+            </Link>
           </div>
         </div>
       </div>

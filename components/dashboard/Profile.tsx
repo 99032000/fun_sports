@@ -184,10 +184,11 @@ const Profile = ({
           >
             Save
           </button>
-
-          <button className="btn btn-accent text-white">
-            <Link href={"/login/reset-password"}>reset password </Link>
-          </button>
+          <Link href={"/login/reset-password"}>
+            <button className="btn btn-accent text-white">
+              reset password
+            </button>
+          </Link>
         </div>
       </div>
     </div>
