@@ -18,7 +18,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
       , { status: 200 });
   } catch (error: any) {
     return new Response(JSON.stringify(JSON.stringify({
-      success: true,
+      success: false,
       data: null,
       error,
     })), { status: 400 });

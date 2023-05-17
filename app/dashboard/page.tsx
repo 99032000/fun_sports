@@ -8,8 +8,20 @@ const Page = async () => {
     where: {
       id: userId,
     },
+    include: {
+      hobby: {
+        include: {
+          sports_type: {
+            select: {
+              name: true,
+            },
+          },
+        },
+      },
+    },
   });
-  return <Profile user={user} />;
+  const sports_types = await prisma.sports_type.findMany();
+  return <Profile user={user} sports_types={sports_types} />;
 };
 
 export default Page;

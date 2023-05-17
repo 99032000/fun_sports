@@ -1,4 +1,3 @@
-"use client";
 import { Dispatch, SetStateAction } from "react";
 import type { hobby_type } from "@/lib/api";
 import { SportsLevelName } from "@/utility/Data_defination";
@@ -29,7 +28,7 @@ const SportsLevel = ({
     });
   };
   return (
-    <div className=" my-4 flex flex-row  max-w-full justify-between">
+    <div className=" my-4 flex flex-row  max-w-full justify-between px-1">
       <div className=" flex flex-row gap-4 flex-1">
         <p className=" w-fit">{hobby.sports_name}</p>
         <select

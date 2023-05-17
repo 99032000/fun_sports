@@ -1,15 +1,17 @@
 
 
 export const SportsLevelName: string[] = [
-  "GrandMaster",
-  "Master",
-  "High",
-  "Medium",
-  "Noob",
-  "卧龙凤雏",
-  "黑洞",
-  "rex 专属 夕阳红无敌老菜逼",
-  "damon图书馆💻 无敌段位 没有之一"];
+  "职业大神 GrandMaster",
+  "高手 Master",
+  "还行 High",
+  "凑合 Medium",
+  "萌新 Noob",
+  "卧龙凤雏 SB",
+  "黑洞 Black hole",
+  "Rex 专属 夕阳红无敌老菜逼",
+  "Damon图书馆💻 无敌段位 没有之一",
+  "Alex 大帅比"
+];
 
 //sign up sample data response
 //   {

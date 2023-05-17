@@ -11,6 +11,7 @@ import { AiOutlinePlus } from "react-icons/ai";
 import { updateUser } from "@/lib/api";
 import type { updateUserBody, hobby_type } from "@/lib/api";
 import { useRouter } from "next/navigation";
+import HobbyDropDownList from "./HobbyDropDown";
 
 const Page = ({ sports_types }: { sports_types: sports_type[] }) => {
   // input reference
@@ -93,45 +94,7 @@ const Page = ({ sports_types }: { sports_types: sports_type[] }) => {
       signUp(email!, password!, name!);
     }
   };
-  //handle hobby plus button
-  const handleHobbyListOnClick = (e: MouseEvent, type: sports_type) => {
-    e.preventDefault();
-    // init list
-    if (
-      hobbyList.filter((item) => item.sports_name === type.name).length === 0
-    ) {
-      setHobbyList((pre) => [
-        ...pre,
-        { sports_typeId: type.id, sports_name: type.name, level: -1 },
-      ]);
-    }
-  };
 
-  const hobbyDropDownList = () => (
-    <label className="label">
-      <span className="text-base label-text">Hobbies</span>
-      <div className="dropdown dropdown-end">
-        <label tabIndex={0} className="btn btn-circle btn-sm btn-primary mb-1">
-          <AiOutlinePlus className="w-6 h-6 text-white" />
-        </label>
-        <ul
-          tabIndex={0}
-          className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52"
-        >
-          {sports_types.map((type) => {
-            return (
-              <li
-                key={type.id}
-                onClick={(e) => handleHobbyListOnClick(e, type)}
-              >
-                <a>{type.name}</a>
-              </li>
-            );
-          })}
-        </ul>
-      </div>
-    </label>
-  );
   const sports_level = () => {
     return hobbyList.map((hobby) => {
       return (
@@ -162,7 +125,11 @@ const Page = ({ sports_types }: { sports_types: sports_type[] }) => {
             />
           </div>
           <div>
-            {hobbyDropDownList()}
+            <HobbyDropDownList
+              hobbyList={hobbyList}
+              setHobbyList={setHobbyList}
+              sports_types={sports_types}
+            />
             {sports_level()}
           </div>
           <div>
