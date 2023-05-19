@@ -142,7 +142,14 @@ const Profile = ({
       </div>
       <div className=" mt-4 w-full p-6 m-auto bg-white rounded-md shadow-md">
         <div>
-          <h1 className=" text-xl">User detail</h1>
+          <div className="flex justify-between">
+            <h1 className=" text-xl">User detail</h1>
+            <Link href={"/login/reset-password"}>
+              <button className="btn btn-accent text-white text-xs sm:text-sm btn-xs sm:btn-sm md:btn-md">
+                reset password
+              </button>
+            </Link>
+          </div>
           <div className="flex flex-row gap-4 mt-8">
             <h2 className=" my-auto">Email:</h2>
             <h2 className=" my-auto">{user?.email}</h2>
@@ -178,17 +185,13 @@ const Profile = ({
         <div className="flex justify-between mt-16">
           <button
             className={
-              "btn btn-primary w-28 text-white " + (loading && " loading")
+              "btn btn-xs sm:btn-sm md:btn-md btn-primary w-28 text-white " +
+              (loading && " loading")
             }
             onClick={handleSaveOnClick}
           >
             Save
           </button>
-          <Link href={"/login/reset-password"}>
-            <button className="btn btn-accent text-white">
-              reset password
-            </button>
-          </Link>
         </div>
       </div>
     </div>
