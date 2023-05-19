@@ -9,29 +9,33 @@ datasource db {
 }
 
 model user {
-  id             String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  email          String           @unique
-  name           String?
-  phone          String?          @unique
-  active         Boolean          @default(true)
-  wechatId       String?
-  created_at     DateTime         @default(now())
-  updated_at     DateTime         @default(now()) @updatedAt
-  Organization   organization[]
-  Social_booking social_booking[]
-  Social_events  social_event[]
-  hobby          hobby[]
+  id                String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email             String           @unique
+  name              String?
+  phone             String?          @unique
+  active            Boolean          @default(true)
+  wechatId          String?
+  created_at        DateTime         @default(now())
+  updated_at        DateTime         @default(now()) @updatedAt
+  Organization      organization[]
+  Social_booking    social_booking[]
+  Social_events     social_event[]
+  hobby             hobby[]
+  max_orgianization Int              @default(1)
 }
 
 model organization {
-  id            Int         @id @default(autoincrement())
-  name          String      @unique
+  id            Int            @id @default(autoincrement())
+  name          String         @unique
   wechatId      String
-  phone         String?     @unique
-  userId        String      @db.Uuid
+  phone         String?
+  userId        String         @db.Uuid
   sports_typeId Int
-  sports_type   sports_type @relation(fields: [sports_typeId], references: [id])
-  owner         user        @relation(fields: [userId], references: [id])
+  sports_type   sports_type    @relation(fields: [sports_typeId], references: [id])
+  owner         user           @relation(fields: [userId], references: [id])
+  is_verified   Boolean        @default(false)
+  social_event  social_event[]
+  description   String         @default("")
 }
 
 model social_event {
@@ -49,6 +53,8 @@ model social_event {
   Social_booking social_booking[]
   owner          user             @relation(fields: [ownerId], references: [id])
   sports_type    sports_type      @relation(fields: [sports_typeId], references: [id])
+  organization   organization?    @relation(fields: [organizationId], references: [id])
+  organizationId Int?
   is_template    Boolean          @default(false)
 }
 
@@ -85,6 +91,7 @@ model hobby {
   sports_typeId Int
   user          user        @relation(fields: [userId], references: [id])
   userId        String      @db.Uuid
-  level         Int         @default(0) 
-  @@unique([sports_typeId,userId])
+  level         Int         @default(0)
+
+  @@unique([sports_typeId, userId])
 }
