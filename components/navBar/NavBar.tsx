@@ -1,11 +1,10 @@
 "use client";
 
 import { useSupabase } from "../providers/supabase-provider";
-import { useEffect, useState } from "react";
+import { useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import type { Session } from "@supabase/supabase-js";
-import { getUserById } from "@/lib/api";
 import toast from "react-hot-toast";
 import { useRouter, usePathname } from "next/navigation";
 import type { user } from "@prisma/client";
@@ -19,6 +18,7 @@ const NavBar = ({
   const { supabase } = useSupabase();
   const router = useRouter();
   const pathName = usePathname();
+  const dropdownRef = useRef<HTMLDivElement>(null);
   const titleList = [
     { name: "Home", href: "/" },
     { name: "Coaching", href: "/coaching" },
@@ -26,29 +26,10 @@ const NavBar = ({
     { name: "Contact me", href: "/contact-me" },
   ];
   const dashboardTitleList = [
-    { name: "Profile", href: "/dashboard/profile" },
+    { name: "Profile", href: "/dashboard" },
     { name: "Event", href: "/dashboard/event" },
-    { name: "Booking", href: "/booking" },
+    { name: "Booking", href: "/dashboard/booking" },
   ];
-
-  // useEffect(() => {
-  //   async function getData() {
-  //     console.log("here");
-  //     if (session?.user.id) {
-  //       const response = await getUserById(session.user.id);
-  //       if (response.success) setUser(response.data.user);
-  //       if (response.error) {
-  //         toast.error(response.error + "\n 速度联系我!!!我得debug");
-  //       }
-  //     }
-  //   }
-  //   getData();
-  // }, [session?.user.id]);
-
-  // useEffect(() => {
-  //   if (pathName.startsWith("/dashboard")) setTitles(dashboardTitleList);
-  //   else setTitles(titleList);
-  // }, [pathName, dashboardTitleList, titleList]);
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
@@ -65,6 +46,7 @@ const NavBar = ({
       </li>
     ));
   };
+  //!TODO close dropdown after click on
   return (
     <div className="navbar bg-base-100 shadow-lg z-10">
       <div className="navbar-start">
@@ -121,13 +103,13 @@ const NavBar = ({
               className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52"
             >
               <li>
-                <Link href={"/dashboard"}>dashboard</Link>
+                <Link href={"/dashboard"}>Dashboard</Link>
               </li>
               <li>
-                <a>bookings</a>
+                <Link href={"/dashboard/booking"}>Bookings</Link>
               </li>
               <li>
-                <a onClick={handleSignOut}>sign out</a>
+                <a onClick={handleSignOut}>Sign out</a>
               </li>
             </ul>
           </div>
