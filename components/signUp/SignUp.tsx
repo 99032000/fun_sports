@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { MouseEvent, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import toast from "react-hot-toast";
 import { getUserByEmail } from "@/lib/api";

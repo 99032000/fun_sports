@@ -36,6 +36,7 @@ model organization {
   is_verified   Boolean        @default(false)
   social_event  social_event[]
   description   String         @default("")
+  avatar_url    String?
 }
 
 model social_event {

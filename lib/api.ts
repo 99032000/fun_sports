@@ -13,6 +13,17 @@ export type hobby_type = {
   sports_name: string;
   level: number;
 };
+export type upsertOrganizationBody = {
+  id?: number;
+  name?: string;
+  wechatId?: string;
+  phone?: string;
+  userId?: string;
+  sports_typeId?: number;
+  description?: string;
+  avatar_url?: string;
+}
+
 
 export const getUserByEmail = async (email: string) => {
   const response = await fetch(
@@ -35,7 +46,7 @@ export const getSportsTypes = async () => {
   return await response.json();
 }
 
-export const updateUser = async (body: any) => {
+export const updateUser = async (body: updateUserBody) => {
   const response = await fetch("/api/user/updateUser", {
     method: "POST",
     body: JSON.stringify(body),
@@ -46,6 +57,14 @@ export const updateUser = async (body: any) => {
 export const deleteHobby = async (id: number) => {
   const response = await fetch(`/api/hobbies/${id}`, {
     method: "DELETE",
+  });
+  return await response.json();
+}
+
+export const upsertOrganization = async (body: upsertOrganizationBody) => {
+  const response = await fetch(`/api/organization`, {
+    method: "POST",
+    body: JSON.stringify(body),
   });
   return await response.json();
 }
