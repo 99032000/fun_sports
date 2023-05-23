@@ -179,7 +179,7 @@ function NewOrganization({ userId, sports_types }: props) {
             <img
               src={URL.createObjectURL(viewAvatar)}
               alt="your image"
-              className=" w-24 h-24"
+              className=" w-24 h-24 rounded-full"
             />
           </div>
         )}

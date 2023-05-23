@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { deleteOrganization } from "@/lib/api";
@@ -74,7 +75,16 @@ const OrganizationCard = ({
     <div className="card bg-base-100 max-w-md shadow-xl p-4 flex flex-col gap-4 w-full sm:min-w-[350px]">
       {modalElement()}
       <div className="flex justify-between">
-        <h1 className=" text-xl">{organization.name}</h1>
+        <div className="flex gap-2">
+          <h1 className=" text-2xl my-auto">{organization.name}</h1>
+          {organization.avatar_url && (
+            <img
+              className=" rounded-full w-14 h-14"
+              src={organization.avatar_url}
+              alt="avatar"
+            />
+          )}
+        </div>
         <div className="flex gap-8 justify-end">
           <div className="tooltip tooltip-primary" data-tip="Edit">
             <AiFillEdit className=" text-primary text-2xl cursor-pointer" />
