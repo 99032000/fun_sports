@@ -62,9 +62,16 @@ export const deleteHobby = async (id: number) => {
 }
 
 export const upsertOrganization = async (body: upsertOrganizationBody) => {
-  const response = await fetch(`/api/organization`, {
+  const response = await fetch(`/api/organizations`, {
     method: "POST",
     body: JSON.stringify(body),
+  });
+  return await response.json();
+}
+
+export const deleteOrganization = async (id: number) => {
+  const response = await fetch(`/api/organizations/${id}`, {
+    method: "DELETE",
   });
   return await response.json();
 }

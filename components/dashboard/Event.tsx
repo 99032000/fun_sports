@@ -15,9 +15,13 @@ const Event = ({ events, organizations, sports_types }: Props) => {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const organizationList = () =>
-    events.map((event, index) => {
+    organizations.map((organization) => {
       return (
-        <div key={index} className="card w-96 bg-base-100 shadow-xl"></div>
+        <OrganizationCard
+          key={organization.id}
+          organization={organization}
+          sports_types={sports_types}
+        />
       );
     });
   return (
@@ -42,9 +46,7 @@ const Event = ({ events, organizations, sports_types }: Props) => {
               </button>
             </Link>
           </div>
-          <div className=" mt-4">
-            <OrganizationCard />
-          </div>
+          <div className=" mt-4 flex gap-4 flex-wrap">{organizationList()}</div>
         </div>
         <div className="divider"></div>
         <div className="flex justify-between">
