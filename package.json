@@ -18,6 +18,7 @@
     "@types/react": "18.2.0",
     "@types/react-dom": "18.2.1",
     "daisyui": "^2.51.6",
+    "dayjs": "^1.11.7",
     "encoding": "^0.1.13",
     "eslint": "8.39.0",
     "eslint-config-next": "13.3.4",
@@ -27,6 +28,8 @@
     "react-dom": "^18.2.0",
     "react-hot-toast": "^2.4.1",
     "react-icons": "^4.8.0",
+    "react-tailwindcss-datepicker": "^1.6.1",
+    "react-time-picker": "^6.2.0",
     "typescript": "5.0.4",
     "zod": "^3.21.4"
   },

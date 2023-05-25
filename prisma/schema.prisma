@@ -57,6 +57,7 @@ model social_event {
   organization   organization?    @relation(fields: [organizationId], references: [id])
   organizationId Int?
   is_template    Boolean          @default(false)
+  fee            Int?             @default(0)
 }
 
 model social_booking {

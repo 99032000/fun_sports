@@ -41,7 +41,7 @@ const Event = ({ events, organizations, sports_types }: Props) => {
           <div className="flex justify-between">
             <h1 className=" text-lg md:text-xl">Organizations</h1>
             <Link href="/dashboard/event/new-organization">
-              <button className="btn btn-primary btn-xs sm:btn-sm md:btn-md">
+              <button className="btn btn-primary btn-sm md:btn-md">
                 New Organization
               </button>
             </Link>
@@ -51,9 +51,11 @@ const Event = ({ events, organizations, sports_types }: Props) => {
         <div className="divider"></div>
         <div className="flex justify-between">
           <h1 className=" text-lg md:text-xl">Event</h1>
-          <button className="btn btn-primary btn-xs sm:btn-sm md:btn-md">
-            New Event
-          </button>
+          <Link href={"/dashboard/event/new-event"}>
+            <button className="btn btn-primary btn-sm md:btn-md">
+              New Event
+            </button>
+          </Link>
         </div>
       </div>
     </div>
