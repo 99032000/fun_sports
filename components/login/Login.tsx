@@ -13,10 +13,6 @@ const Login = ({ redirectUrl }: { redirectUrl: string | undefined }) => {
   // auth variables
   const auth = supabase.auth;
   const router = useRouter();
-  const handleSignUp = (e: { preventDefault: () => void }) => {
-    e.preventDefault();
-    router.push("/signup");
-  };
   const handleSignIn = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
     const email = emailRef.current?.value;

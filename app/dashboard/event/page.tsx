@@ -1,6 +1,7 @@
 import prisma from "@/lib/client/prismaClient";
 import { getSession } from "@/lib/client/supabaseServer";
 import Event from "@/components/dashboard/Event";
+import { getSportsType } from "@/lib/serverSideApi";
 const Page = async () => {
   const session = await getSession();
   const userId = session?.user.id;
@@ -14,7 +15,7 @@ const Page = async () => {
       ownerId: userId,
     },
   });
-  const sports_types_promise = prisma.sports_type.findMany();
+  const sports_types_promise = getSportsType();
   const [events, organizations, sports_types] = await Promise.all([
     events_promise,
     organizations_promise,

@@ -1,6 +1,7 @@
 import prisma from "@/lib/client/prismaClient";
 import Profile from "@/components/dashboard/Profile";
 import { getSession } from "@/lib/client/supabaseServer";
+import { getSportsType } from "@/lib/serverSideApi";
 const Page = async () => {
   const session = await getSession();
   const userId = session?.user.id;
@@ -20,7 +21,7 @@ const Page = async () => {
       },
     },
   });
-  const sports_types = await prisma.sports_type.findMany();
+  const sports_types = await getSportsType();
   return <Profile user={user} sports_types={sports_types} />;
 };
 
