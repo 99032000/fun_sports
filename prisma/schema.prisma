@@ -44,7 +44,7 @@ model social_event {
   name           String
   address        String
   venue_name     String?
-  date           DateTime         @db.Timestamp(0)
+  date           DateTime         @db.Timestamptz(0)
   ownerId        String           @db.Uuid
   booking_groups Json?
   created_at     DateTime         @default(now())

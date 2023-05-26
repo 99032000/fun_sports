@@ -42,10 +42,10 @@ export async function POST(req: NextRequest) {
     }
   } catch (error: any) {
     console.error(error);
-    return new Response(JSON.stringify(JSON.stringify({
+    return new Response(JSON.stringify({
       success: false,
       data: null,
       error,
-    })), { status: 400 });
+    }), { status: 400 });
   }
 }

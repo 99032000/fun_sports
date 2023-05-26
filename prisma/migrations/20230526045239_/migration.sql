@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "social_event" ALTER COLUMN "date" SET DATA TYPE TIMESTAMPTZ(0);

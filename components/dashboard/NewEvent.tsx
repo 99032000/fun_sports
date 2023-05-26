@@ -1,86 +1,144 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
-import { upsertOrganization, upsertOrganizationBody } from "@/lib/api";
+
+import { createEvent, createEventBody, event_group } from "@/lib/api";
 import { hoursList, minsList } from "@/utility/Date";
 import type { organization, sports_type } from "@prisma/client";
 import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
+import { useRouter } from "next/navigation";
 import { ChangeEvent, useRef, useState } from "react";
 import { toast } from "react-hot-toast";
-import { AiOutlineClose, AiOutlinePlus } from "react-icons/ai";
 import Datepicker from "react-tailwindcss-datepicker";
+import EventGroupDetails from "./EventGroupDetails";
 
 type props = {
   userId: string;
   organizations: organization[];
   sports_types: sports_type[];
 };
-type Group = {
-  name: string;
-  amount: number;
-};
+
 //? supabase upload image
 // {data: null, error: {…}}
 
 function NewEvent({ userId, organizations, sports_types }: props) {
   const [supabase] = useState(() => createBrowserSupabaseClient());
-
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const yesterday = new Date();
   yesterday.setDate(yesterday.getDate() - 1);
   const nextMonth = new Date();
   nextMonth.setDate(nextMonth.getDate() + 29);
-  const [value, setValue] = useState({
-    startDate: new Date(),
-    endDate: new Date(),
+  const [date, setDate] = useState<{
+    startDate: Date | null;
+    endDate: Date | null;
+  }>({
+    startDate: null,
+    endDate: null,
   });
-  const [group, setGroup] = useState<Group[]>([]);
+  const [name, setName] = useState("");
+  const [sportTypeValue, setSportTypeValue] = useState(-1);
+  const [group, setGroup] = useState<event_group[]>([]);
   const nameRef = useRef<HTMLInputElement>(null);
-  const sportsTypeRef = useRef<HTMLSelectElement>(null);
+  const orgRef = useRef<HTMLSelectElement>(null);
   const hourRef = useRef<HTMLSelectElement>(null);
   const minRef = useRef<HTMLSelectElement>(null);
   const addressRef = useRef<HTMLInputElement>(null);
   const venueRef = useRef<HTMLInputElement>(null);
   const feeRef = useRef<HTMLInputElement>(null);
 
-  const handleValueChange = (newValue: any) => {
+  const handleDateChange = (newValue: any) => {
     console.log("newValue:", newValue);
-    setValue(newValue);
+    setDate(newValue);
   };
 
-  const handleGroupAddOnClick = () => {
-    setGroup((pre) => [
-      ...pre,
-      {
-        name: "",
-        amount: 0,
-      },
-    ]);
-  };
-  const handleGroupName = (e: ChangeEvent<HTMLInputElement>, index: number) => {
-    setGroup((pre) => {
-      pre[index].name = e.target.value;
-      return pre;
-    });
-  };
-  const handleGroupAmount = (
-    e: ChangeEvent<HTMLInputElement>,
-    index: number
+  const handleOrganizationSelectOnChange = (
+    e: ChangeEvent<HTMLSelectElement>
   ) => {
-    setGroup((pre) => {
-      const amount = parseInt(e.target.value);
-      if (amount) pre[index].amount = amount;
-      else pre[index].amount = 0;
-      return pre;
-    });
+    const org = organizations.find(
+      (item) => item.id === parseInt(e.target.value)
+    );
+    if (org) {
+      setName(org.name);
+      setSportTypeValue(org.sports_typeId);
+    }
   };
-  const handleDeleteOnClick = (index: number) => {
-    const newGroup = [...group];
-    newGroup.splice(index, 1);
-    setGroup(newGroup);
+  const handleSaveButtonOnClick = async () => {
+    const hours = parseInt(hourRef.current!.value);
+    const mins = parseInt(minRef.current!.value);
+    const address = addressRef.current!.value;
+    const fee = parseInt(feeRef.current!.value);
+    const org = organizations.find(
+      (org) => org.id === parseInt(orgRef.current!.value)
+    );
+    // form validation
+    if (!org) {
+      toast.error("Please select organization");
+      return;
+    }
+    if (name.length === 0) {
+      toast.error("Please enter event name");
+      return;
+    }
+    if (!date.startDate) {
+      toast.error("Please enter event date");
+      return;
+    }
+    if (hours < 0 || mins < 0) {
+      toast.error("Please enter time");
+      return;
+    }
+    if (address.length === 0) {
+      toast.error("Please enter address");
+      return;
+    }
+    if (Number.isNaN(fee) || fee < 0) {
+      toast.error("make sure the fee is greater or equals to  zero");
+      return;
+    }
+
+    if (group.length === 0) {
+      toast.error("please add a group");
+      return;
+    }
+    for (let item of group) {
+      if (item.name.length < 1) {
+        toast.error("each group must have a name");
+        return;
+      }
+      if (item.amount < 1) {
+        toast.error("amount must be greater than 0");
+        return;
+      }
+    }
+    // create event start
+    setLoading(true);
+    console.log(date.startDate);
+    const timeStamp = new Date(`${date.startDate} ${hours}:${mins}`);
+    console.log(timeStamp);
+    const body: createEventBody = {
+      ownerId: userId,
+      organizationId: org.id,
+      name,
+      address,
+      venue_name:
+        venueRef.current!.value === "" ? undefined : venueRef.current!.value,
+      date: timeStamp,
+      booking_groups: group,
+      sports_typeId: sportTypeValue,
+      fee,
+    };
+    const result = await createEvent(body);
+    console.log(result);
+    if (result.success) {
+      setLoading(false);
+      toast.success("event created successfully");
+      router.replace("/dashboard/event");
+      return;
+    }
+    if (result.error) toast.error("failed to create event");
+    setLoading(false);
   };
-  const handleSaveButtonOnClick = () => {
-    console.log(group);
-  };
+
   const eventInfo = () => (
     <>
       <div className="grid grid-cols-1 grid-flow-row-dense auto-cols-max gap-4 lg:grid-cols-2">
@@ -90,12 +148,13 @@ function NewEvent({ userId, organizations, sports_types }: props) {
             <select
               className="select w-full max-w-max sm:max-w-[300px] md:max-w-[350px] select-primary select-sm"
               defaultValue={-1}
-              ref={sportsTypeRef}
+              ref={orgRef}
+              onChange={handleOrganizationSelectOnChange}
             >
               <option disabled value={-1}>
                 Choose a organization
               </option>
-              {organizations.map((org, index) => (
+              {organizations.map((org) => (
                 <option key={org.id} value={org.id}>
                   {org.name}
                 </option>
@@ -109,14 +168,16 @@ function NewEvent({ userId, organizations, sports_types }: props) {
             type="address"
             className="input input-bordered w-full input-sm max-w-sm input-primary"
             ref={nameRef}
+            value={name}
+            onChange={(e) => setName(e.target.value)}
           />
         </div>
 
         <div className="flex flex-row gap-4 md:mt-8 mt-4 flex-wrap">
           <h2 className=" my-auto text-sm sm:text-lg ">Date:*</h2>
           <Datepicker
-            value={value}
-            onChange={handleValueChange}
+            value={date}
+            onChange={handleDateChange}
             asSingle={true}
             useRange={false}
             displayFormat={"DD/MM/YYYY"}
@@ -164,14 +225,13 @@ function NewEvent({ userId, organizations, sports_types }: props) {
           <h2 className=" my-auto text-sm sm:text-lg">Sports_type:*</h2>
           <select
             className="select w-full max-w-fit sm:max-w-[300px] md:max-w-[350px] select-primary select-sm"
-            defaultValue={-1}
-            ref={sportsTypeRef}
-            disabled={false}
+            disabled={true}
+            value={sportTypeValue}
           >
             <option disabled value={-1}>
               Choose a sport
             </option>
-            {sports_types.map((sport, index) => (
+            {sports_types.map((sport) => (
               <option key={sport.id} value={sport.id}>
                 {sport.name}
               </option>
@@ -195,7 +255,7 @@ function NewEvent({ userId, organizations, sports_types }: props) {
           />
         </div>
         <div className="flex flex-row gap-4 md:mt-8 mt-4">
-          <h2 className=" my-auto text-sm sm:text-lg">Fee:</h2>
+          <h2 className=" my-auto text-sm sm:text-lg">Fee:*</h2>
           <input
             type="number"
             className="input input-bordered w-full input-sm max-w-sm input-primary"
@@ -204,65 +264,7 @@ function NewEvent({ userId, organizations, sports_types }: props) {
           />
         </div>
       </div>
-      <div className="flex gap-4 md:mt-8 mt-4 w-full">
-        <div className="flex gap-4">
-          <h2 className=" my-auto text-sm sm:text-lg">Group details</h2>
-          <AiOutlinePlus
-            className="w-6 h-6 bg-primary text-white rounded-full cursor-pointer"
-            onClick={handleGroupAddOnClick}
-          />
-        </div>
-      </div>
-      <div className=" min-w-full">
-        {group.length > 0 ? (
-          group.map((item, index) => {
-            return (
-              <div className="flex gap-4" key={index}>
-                <div className=" md:mt-8 mt-4">
-                  {index === 0 && (
-                    <h2 className=" my-auto text-sm sm:text-lg mb-2">Name:</h2>
-                  )}
-                  <input
-                    type="text"
-                    className="input input-bordered w-full input-sm max-w-sm input-primary"
-                    defaultValue={item.name}
-                    onChange={(e) => handleGroupName(e, index)}
-                  />
-                </div>
-                <div className="md:mt-8 mt-4">
-                  {index === 0 && (
-                    <h2 className=" my-auto text-sm sm:text-lg mb-2">
-                      Amount:
-                    </h2>
-                  )}
-                  <input
-                    type="number"
-                    className="input input-bordered w-full input-sm max-w-[100px] input-primary"
-                    ref={venueRef}
-                    defaultValue={item.amount}
-                    onChange={(e) => handleGroupAmount(e, index)}
-                  />
-                </div>
-                <div className=" flex flex-col justify-end">
-                  <AiOutlineClose
-                    className="w-6 h-6 bg-primary text-white rounded-full cursor-pointer"
-                    onClick={() => handleDeleteOnClick(index)}
-                  />
-                </div>
-              </div>
-            );
-          })
-        ) : (
-          <div className="mockup-code  bg-primary text-primary-content mt-4">
-            <pre data-prefix=">">
-              <code>Click the add icon to add your group :)</code>
-            </pre>
-            <pre data-prefix=">">
-              <code>Waiting...</code>
-            </pre>
-          </div>
-        )}
-      </div>
+      <EventGroupDetails group={group} setGroup={setGroup} />
     </>
   );
   return (
