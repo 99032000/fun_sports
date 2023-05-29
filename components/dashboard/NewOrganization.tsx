@@ -174,6 +174,7 @@ function NewOrganization({ userId, sports_types }: props) {
             type="file"
             className="file-input file-input-bordered file-input-primary w-full max-w-xs file-input-sm md:file-input-md"
             onChange={uploadImages}
+            accept="image/*"
             ref={uploadAvatarRef}
           />
         </div>

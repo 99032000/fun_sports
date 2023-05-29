@@ -3,6 +3,7 @@
 
 import { deleteEvent } from "@/lib/api";
 import type { social_event, sports_type } from "@prisma/client";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Key, useState } from "react";
 import toast from "react-hot-toast";
@@ -19,7 +20,7 @@ const EventCard = ({
   const router = useRouter();
   const toLocalTimeString = (timeStamp: Date) => {
     const dateStamp = new Date(timeStamp);
-    return dateStamp.toLocaleString();
+    return dateStamp.toLocaleString("en-AU");
   };
   const getSportsTypeName = (id: number) => {
     return sports_types.find((type) => type.id === id)?.name;
@@ -28,18 +29,17 @@ const EventCard = ({
     e.preventDefault();
     setLoading(true);
     const result = await deleteEvent(event.id);
-    console.log(result);
     if (result.success) {
       router.refresh();
     } else {
       toast.error("fail to delete event.");
     }
-    document.getElementById("my-modal")?.click();
+    document.getElementById("event_card")?.click();
     setLoading(false);
   };
   const handleCloseOnClick = (e: { preventDefault: () => void }) => {
     e.preventDefault();
-    document.getElementById("my-modal")?.click();
+    document.getElementById("event_card")?.click();
   };
 
   const groupDetails = (list: any) => (
@@ -81,7 +81,7 @@ const EventCard = ({
 
   const modalElement = () => (
     <>
-      <input type="checkbox" id="my-modal" className="modal-toggle" />
+      <input type="checkbox" id="event_card" className="modal-toggle" />
       <div className="modal">
         <div className="modal-box">
           <h3 className="font-bold text-lg">
@@ -112,6 +112,7 @@ const EventCard = ({
       </div>
     </>
   );
+
   return (
     <div className="card bg-base-100 max-w-md shadow-xl p-4 flex flex-col gap-4 w-full sm:min-w-[350px]">
       {modalElement()}
@@ -121,10 +122,17 @@ const EventCard = ({
         </div>
         <div className="flex gap-8 justify-end">
           <div className="tooltip tooltip-primary" data-tip="Edit">
-            <AiFillEdit className=" text-primary text-2xl cursor-pointer" />
+            <Link
+              href={{
+                pathname: `/dashboard/event/update-event`,
+                query: { id: event.id },
+              }}
+            >
+              <AiFillEdit className=" text-primary text-2xl cursor-pointer" />
+            </Link>
           </div>
           <div className="tooltip tooltip-secondary" data-tip="Delete">
-            <label htmlFor="my-modal">
+            <label htmlFor="event_card">
               <AiFillDelete className=" text-secondary text-2xl cursor-pointer" />
             </label>
           </div>

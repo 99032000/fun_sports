@@ -38,6 +38,7 @@ function NewEvent({ userId, organizations, sports_types }: props) {
   const [name, setName] = useState("");
   const [sportTypeValue, setSportTypeValue] = useState(-1);
   const [group, setGroup] = useState<event_group[]>([]);
+  const [images, setImages] = useState<any[]>([]);
   const nameRef = useRef<HTMLInputElement>(null);
   const orgRef = useRef<HTMLSelectElement>(null);
   const hourRef = useRef<HTMLSelectElement>(null);
@@ -50,7 +51,23 @@ function NewEvent({ userId, organizations, sports_types }: props) {
     console.log("newValue:", newValue);
     setDate(newValue);
   };
+  const uploadImages = async (e: any) => {
+    const files = e.target.files as any[];
+    if (files.length > 0) {
+      console.log(files);
+      for (let image of files) {
+        if (image.size > 6291456) {
+          toast.error("upload image cannot be larger than 6MB");
+          return;
+        }
+      }
+      setImages((pre) => [...pre, ...files]);
+    }
+  };
 
+  const handleDeleteImageOnClick = (imageName: string) => {
+    setImages((pre) => images.filter((image) => image.name !== imageName));
+  };
   const handleOrganizationSelectOnChange = (
     e: ChangeEvent<HTMLSelectElement>
   ) => {
@@ -63,6 +80,7 @@ function NewEvent({ userId, organizations, sports_types }: props) {
     }
   };
   const handleSaveButtonOnClick = async () => {
+    console.log(images);
     const hours = parseInt(hourRef.current!.value);
     const mins = parseInt(minRef.current!.value);
     const address = addressRef.current!.value;
@@ -95,7 +113,10 @@ function NewEvent({ userId, organizations, sports_types }: props) {
       toast.error("make sure the fee is greater or equals to  zero");
       return;
     }
-
+    if (images.length > 3) {
+      toast.error("images can not exceed than 3");
+      return;
+    }
     if (group.length === 0) {
       toast.error("please add a group");
       return;
@@ -135,6 +156,14 @@ function NewEvent({ userId, organizations, sports_types }: props) {
     if (result.success) {
       setLoading(false);
       toast.success("event created successfully");
+      const uploadPromises = images.map((image, index) => {
+        console.log(`${result.data.id}/image${index}`);
+        return supabase.storage
+          .from("events")
+          .upload(`${result.data.id}/image${index}`, image);
+      });
+      //! may need to handle error
+      await Promise.all(uploadPromises);
       router.replace("/dashboard/event");
       return;
     }
@@ -267,7 +296,7 @@ function NewEvent({ userId, organizations, sports_types }: props) {
           />
         </div>
         <div className="flex flex-row gap-4 mt-8 flex-wrap">
-          <h2 className=" my-auto">Description:*</h2>
+          <h2 className=" my-auto text-sm sm:text-lg">Description:*</h2>
           <textarea
             placeholder="Describe your organization"
             className="textarea textarea-bordered textarea-lg w-full max-w-lg textarea-primary"
@@ -275,6 +304,41 @@ function NewEvent({ userId, organizations, sports_types }: props) {
           ></textarea>
         </div>
       </div>
+      <div className="flex flex-row gap-4 mt-8 flex-wrap">
+        <div className="mockup-code  bg-primary text-primary-content w-full">
+          <pre data-prefix=">">
+            <code>Image can not exceed 6MB</code>
+          </pre>
+        </div>
+        <h2 className=" my-auto text-sm sm:text-lg">Upload avatar:</h2>
+        <input
+          type="file"
+          className="file-input file-input-bordered file-input-primary w-full max-w-xs file-input-sm md:file-input-md"
+          onChange={uploadImages}
+          accept="image/*"
+          multiple
+        />
+      </div>
+      {images.length > 0 && (
+        <div className="flex gap-6 mt-8 flex-wrap">
+          {images.map((image) => (
+            <div className="indicator" key={image.name}>
+              <span
+                className="indicator-item badge badge-secondary cursor-pointer w-10 h-8"
+                onClick={() => handleDeleteImageOnClick(image.name)}
+              >
+                X
+              </span>
+
+              <img
+                src={URL.createObjectURL(image)}
+                alt="your image"
+                className=" w-36 h-28 rounded-xl object-cover"
+              />
+            </div>
+          ))}
+        </div>
+      )}
       <EventGroupDetails group={group} setGroup={setGroup} />
     </>
   );

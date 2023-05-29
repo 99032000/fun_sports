@@ -13,8 +13,6 @@ type Props = {
   sports_types: sports_type[];
 };
 const Event = ({ events, organizations, sports_types }: Props) => {
-  const [loading, setLoading] = useState(false);
-  const router = useRouter();
   const organizationList = () =>
     organizations.map((organization) => {
       return (
