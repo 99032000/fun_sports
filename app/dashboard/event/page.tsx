@@ -14,6 +14,9 @@ const Page = async () => {
     where: {
       ownerId: userId,
     },
+    orderBy: {
+      date: "desc",
+    },
   });
   const sports_types_promise = getSportsType();
   const [events, organizations, sports_types] = await Promise.all([

@@ -1,5 +1,4 @@
 import prisma from "@/lib/client/prismaClient";
-import { getSession, createServerClient } from "@/lib/client/supabaseServer";
 
 import type { NextRequest, NextResponse } from 'next/server';
 
@@ -12,21 +11,13 @@ export async function DELETE(req: NextRequest, {
   params: { id: string };
 }) {
   //get the params from the request
-  const supabase = createServerClient();
-  const session = await getSession();
-  const userId = session?.user.id;
   const id = parseInt(params.id);
   try {
-    const result = await prisma.organization.delete({
+    const result = await prisma.social_event.delete({
       where: {
         id,
       },
     });
-    const storageResult = await supabase.storage.from("public").remove([`${userId}/${id}/avatar`]);
-    console.log(storageResult);
-    if (storageResult.error) {
-      throw new Error(storageResult.error.message);
-    }
     return new Response(JSON.stringify({
       success: true,
       data: result,

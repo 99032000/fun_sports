@@ -3,6 +3,7 @@
 import { upsertOrganization, upsertOrganizationBody } from "@/lib/api";
 import type { sports_type } from "@prisma/client";
 import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
+import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import { toast } from "react-hot-toast";
 type props = {
@@ -14,6 +15,7 @@ type props = {
 
 function NewOrganization({ userId, sports_types }: props) {
   const [supabase] = useState(() => createBrowserSupabaseClient());
+  const router = useRouter();
   const nameRef = useRef<HTMLInputElement>(null);
   const phoneRef = useRef<HTMLInputElement>(null);
   const wechatRef = useRef<HTMLInputElement>(null);
@@ -38,7 +40,7 @@ function NewOrganization({ userId, sports_types }: props) {
     const sportsType = parseInt(sportsTypeRef.current!.value);
     const description = descriptionRef.current!.value;
     const avatar = uploadAvatarRef.current!.value;
-    const wechatId = nameRef.current!.value;
+    const wechatId = wechatRef.current!.value;
     console.log(avatar);
     // check input fields
     if (!name) {
@@ -100,6 +102,7 @@ function NewOrganization({ userId, sports_types }: props) {
     console.log(upsertResult);
     if (upsertResult.success) {
       toast.success("upload avatar successful");
+      router.replace("/dashboard/event");
     } else {
       toast.error("upload avatar failed");
     }

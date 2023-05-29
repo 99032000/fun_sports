@@ -46,7 +46,7 @@ model social_event {
   venue_name     String?
   date           DateTime         @db.Timestamptz(0)
   ownerId        String           @db.Uuid
-  booking_groups Json?
+  booking_groups Json
   created_at     DateTime         @default(now())
   updated_at     DateTime         @default(now()) @updatedAt
   sports_level   String?
@@ -58,6 +58,7 @@ model social_event {
   organizationId Int?
   is_template    Boolean          @default(false)
   fee            Int?             @default(0)
+  description    String?
 }
 
 model social_booking {

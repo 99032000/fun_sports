@@ -1,10 +1,11 @@
 "use client";
 import type { organization, social_event, sports_type } from "@prisma/client";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import OrganizationCard from "./OrganizationCard";
+import EventCard from "./EventCard";
 
 type Props = {
   events: social_event[];
@@ -22,6 +23,12 @@ const Event = ({ events, organizations, sports_types }: Props) => {
           organization={organization}
           sports_types={sports_types}
         />
+      );
+    });
+  const eventList = () =>
+    events.map((event) => {
+      return (
+        <EventCard key={event.id} event={event} sports_types={sports_types} />
       );
     });
   return (
@@ -46,7 +53,20 @@ const Event = ({ events, organizations, sports_types }: Props) => {
               </button>
             </Link>
           </div>
-          <div className=" mt-4 flex gap-4 flex-wrap">{organizationList()}</div>
+          {organizations.length > 0 ? (
+            <div className=" mt-4 flex gap-8 flex-wrap">
+              {organizationList()}
+            </div>
+          ) : (
+            <div className="mockup-code  bg-primary text-primary-content mt-4">
+              <pre data-prefix=">">
+                <code>Add your first organization :)</code>
+              </pre>
+              <pre data-prefix=">">
+                <code>Waiting...</code>
+              </pre>
+            </div>
+          )}
         </div>
         <div className="divider"></div>
         <div className="flex justify-between">
@@ -57,6 +77,18 @@ const Event = ({ events, organizations, sports_types }: Props) => {
             </button>
           </Link>
         </div>
+        {events.length > 0 ? (
+          <div className=" mt-4 flex gap-8 flex-wrap">{eventList()}</div>
+        ) : (
+          <div className="mockup-code  bg-primary text-primary-content mt-4">
+            <pre data-prefix=">">
+              <code>Add your first organization :)</code>
+            </pre>
+            <pre data-prefix=">">
+              <code>Waiting...</code>
+            </pre>
+          </div>
+        )}
       </div>
     </div>
   );

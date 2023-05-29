@@ -45,7 +45,7 @@ function NewEvent({ userId, organizations, sports_types }: props) {
   const addressRef = useRef<HTMLInputElement>(null);
   const venueRef = useRef<HTMLInputElement>(null);
   const feeRef = useRef<HTMLInputElement>(null);
-
+  const descriptionRef = useRef<HTMLTextAreaElement>(null);
   const handleDateChange = (newValue: any) => {
     console.log("newValue:", newValue);
     setDate(newValue);
@@ -127,6 +127,9 @@ function NewEvent({ userId, organizations, sports_types }: props) {
       sports_typeId: sportTypeValue,
       fee,
     };
+    if (descriptionRef.current!.value.length > 0) {
+      body.description = descriptionRef.current!.value;
+    }
     const result = await createEvent(body);
     console.log(result);
     if (result.success) {
@@ -262,6 +265,14 @@ function NewEvent({ userId, organizations, sports_types }: props) {
             min="0"
             ref={feeRef}
           />
+        </div>
+        <div className="flex flex-row gap-4 mt-8 flex-wrap">
+          <h2 className=" my-auto">Description:*</h2>
+          <textarea
+            placeholder="Describe your organization"
+            className="textarea textarea-bordered textarea-lg w-full max-w-lg textarea-primary"
+            ref={descriptionRef}
+          ></textarea>
         </div>
       </div>
       <EventGroupDetails group={group} setGroup={setGroup} />
