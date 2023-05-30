@@ -25,7 +25,6 @@ function NewOrganization({ userId, sports_types }: props) {
   const [loading, setLoading] = useState(false);
   const [viewAvatar, setViewAvatar] = useState<any | undefined>(undefined);
   const uploadImages = async (e: any) => {
-    console.log(e.target.files[0]);
     if (e.target.files.length > 0) {
       setViewAvatar(e.target.files[0]);
     } else {
@@ -41,7 +40,6 @@ function NewOrganization({ userId, sports_types }: props) {
     const description = descriptionRef.current!.value;
     const avatar = uploadAvatarRef.current!.value;
     const wechatId = wechatRef.current!.value;
-    console.log(avatar);
     // check input fields
     if (!name) {
       toast.error("name can't be empty.");
@@ -70,7 +68,6 @@ function NewOrganization({ userId, sports_types }: props) {
       userId,
     };
     const result = await upsertOrganization(body);
-    console.log(result);
     if (!result.success) {
       toast.error("something wrong...");
       setLoading(false);
@@ -85,7 +82,6 @@ function NewOrganization({ userId, sports_types }: props) {
     const uploadResult = await supabase.storage
       .from("public")
       .upload(`${userId}/${result.data.id}/avatar`, viewAvatar);
-    console.log(uploadResult);
     if (uploadResult.error) {
       toast.error("something wrong when uploading avatar");
       return;
@@ -94,12 +90,10 @@ function NewOrganization({ userId, sports_types }: props) {
     const getUrl = supabase.storage
       .from("public")
       .getPublicUrl(uploadResult.data!.path);
-    console.log(getUrl);
     const upsertResult = await upsertOrganization({
       id: result.data.id as number,
       avatar_url: getUrl.data.publicUrl,
     });
-    console.log(upsertResult);
     if (upsertResult.success) {
       toast.success("upload avatar successful");
       router.replace("/dashboard/event");

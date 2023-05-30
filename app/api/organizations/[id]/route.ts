@@ -26,7 +26,6 @@ export async function DELETE(req: NextRequest, {
       },
     });
     const storageResult = await supabase.storage.from("public").remove([`${userId}/${id}/avatar`]);
-    console.log(storageResult);
     if (storageResult.error) {
       throw new Error(storageResult.error.message);
     }

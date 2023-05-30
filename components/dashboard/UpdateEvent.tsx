@@ -60,7 +60,6 @@ function UpdateEvent({ event }: { event: social_event }) {
     });
   }, [event]);
   const handleDateChange = (newValue: any) => {
-    console.log("newValue:", newValue);
     setDate(newValue);
   };
 

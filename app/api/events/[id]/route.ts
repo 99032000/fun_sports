@@ -24,11 +24,8 @@ export async function DELETE(req: NextRequest, {
         id,
       },
     });
-    console.log(result.images_url);
     if (result.images_url.length > 0) {
-      console.log("here", id);
       const storageResult = await supabase.storage.from("events").remove([`${params.id}/image0`, `${params.id}/image1`, `${params.id}/image2`]);
-      console.log(storageResult);
       if (storageResult.error) {
         throw new Error(storageResult.error.message);
       }

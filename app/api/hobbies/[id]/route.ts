@@ -12,14 +12,12 @@ export async function DELETE(req: NextRequest, {
 }) {
   //get the params from the request
   const id = parseInt(params.id);
-  console.log(id);
   try {
     const result = await prisma.hobby.delete({
       where: {
         id,
       },
     });
-    console.log(result);
     return new Response(JSON.stringify({
       success: true,
       data: result,

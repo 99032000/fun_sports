@@ -24,7 +24,6 @@ const OrganizationCard = ({
     e.preventDefault();
     setLoading(true);
     const result = await deleteOrganization(organization.id);
-    console.log(result);
     if (result.success) {
       router.refresh();
     } else {

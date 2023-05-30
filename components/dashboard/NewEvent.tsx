@@ -48,13 +48,11 @@ function NewEvent({ userId, organizations, sports_types }: props) {
   const feeRef = useRef<HTMLInputElement>(null);
   const descriptionRef = useRef<HTMLTextAreaElement>(null);
   const handleDateChange = (newValue: any) => {
-    console.log("newValue:", newValue);
     setDate(newValue);
   };
   const uploadImages = async (e: any) => {
     const files = e.target.files as any[];
     if (files.length > 0) {
-      console.log(files);
       for (let image of files) {
         if (image.size > 6291456) {
           toast.error("upload image cannot be larger than 6MB");
@@ -80,7 +78,6 @@ function NewEvent({ userId, organizations, sports_types }: props) {
     }
   };
   const handleSaveButtonOnClick = async () => {
-    console.log(images);
     const hours = parseInt(hourRef.current!.value);
     const mins = parseInt(minRef.current!.value);
     const address = addressRef.current!.value;
@@ -133,9 +130,7 @@ function NewEvent({ userId, organizations, sports_types }: props) {
     }
     // create event start
     setLoading(true);
-    console.log(date.startDate);
     const timeStamp = new Date(`${date.startDate} ${hours}:${mins}`);
-    console.log(timeStamp);
     const body: upsertEventBody = {
       ownerId: userId,
       organizationId: org.id,
@@ -180,7 +175,6 @@ function NewEvent({ userId, organizations, sports_types }: props) {
           urlList.push(url.data.publicUrl);
         }
       });
-      console.log(urlList, "urlList");
       // upload event images_url
       await upsertEvent({
         id: result.data.id as number,
