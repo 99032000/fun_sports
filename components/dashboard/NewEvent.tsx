@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
-import { createEvent, createEventBody, event_group } from "@/lib/api";
+import { upsertEvent, upsertEventBody, event_group } from "@/lib/api";
 import { hoursList, minsList } from "@/utility/Date";
 import type { organization, sports_type } from "@prisma/client";
 import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
@@ -136,7 +136,7 @@ function NewEvent({ userId, organizations, sports_types }: props) {
     console.log(date.startDate);
     const timeStamp = new Date(`${date.startDate} ${hours}:${mins}`);
     console.log(timeStamp);
-    const body: createEventBody = {
+    const body: upsertEventBody = {
       ownerId: userId,
       organizationId: org.id,
       name,
@@ -151,20 +151,45 @@ function NewEvent({ userId, organizations, sports_types }: props) {
     if (descriptionRef.current!.value.length > 0) {
       body.description = descriptionRef.current!.value;
     }
-    const result = await createEvent(body);
-    console.log(result);
+    const result = await upsertEvent(body);
     if (result.success) {
       setLoading(false);
       toast.success("event created successfully");
+      // upload images----------------------------------------------------------------
+      // if no image then redirect now
+      if (images.length === 0) {
+        router.replace("/dashboard/event");
+        setLoading(false);
+        return;
+      }
+      // upload images to bucket
       const uploadPromises = images.map((image, index) => {
-        console.log(`${result.data.id}/image${index}`);
         return supabase.storage
           .from("events")
           .upload(`${result.data.id}/image${index}`, image);
       });
       //! may need to handle error
-      await Promise.all(uploadPromises);
+      const imagePaths = await Promise.all(uploadPromises);
+      // get public url from bucket
+      let urlList: string[] = [];
+      imagePaths.forEach((path) => {
+        if (!path.error) {
+          const url = supabase.storage
+            .from("events")
+            .getPublicUrl(path.data.path);
+          urlList.push(url.data.publicUrl);
+        }
+      });
+      console.log(urlList, "urlList");
+      // upload event images_url
+      await upsertEvent({
+        id: result.data.id as number,
+        images_url: urlList,
+      });
+      //End upload----------------------------------------------------------------
+
       router.replace("/dashboard/event");
+      setLoading(false);
       return;
     }
     if (result.error) toast.error("failed to create event");
@@ -365,7 +390,7 @@ function NewEvent({ userId, organizations, sports_types }: props) {
           <button
             className={
               "btn btn-primary mt-8 shadow" +
-              (loading ? " disabled loading" : "")
+              (loading ? " btn-disabled loading" : "")
             }
             onClick={handleSaveButtonOnClick}
           >

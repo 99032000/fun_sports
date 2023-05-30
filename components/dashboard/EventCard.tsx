@@ -3,6 +3,7 @@
 
 import { deleteEvent } from "@/lib/api";
 import type { social_event, sports_type } from "@prisma/client";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Key, useState } from "react";
@@ -113,6 +114,18 @@ const EventCard = ({
     </>
   );
 
+  const imageList = () =>
+    event.images_url.map((url, index) => (
+      <Image
+        src={url}
+        alt="image"
+        key={index}
+        width={128}
+        height={128}
+        className=" rounded-xl "
+      />
+    ));
+
   return (
     <div className="card bg-base-100 max-w-md shadow-xl p-4 flex flex-col gap-4 w-full sm:min-w-[350px]">
       {modalElement()}
@@ -168,6 +181,9 @@ const EventCard = ({
           {groupDetails(event.booking_groups!)}
         </h2>
       </div>
+      {event.images_url.length > 0 && (
+        <div className="flex gap-4 flex-wrap">{imageList()}</div>
+      )}
     </div>
   );
 };

@@ -28,17 +28,19 @@ export type event_group = {
   amount: number;
   booking_amount: number;
 };
-export type createEventBody = {
-  ownerId: string;
-  organizationId: number;
-  name: string;
-  address: string;
-  venue_name: string | undefined;
-  date: Date;
-  booking_groups: event_group[];
-  sports_typeId: number;
-  fee: number;
+export type upsertEventBody = {
+  id?: number;
+  ownerId?: string;
+  organizationId?: number;
+  name?: string;
+  address?: string;
+  venue_name?: string | undefined;
+  date?: Date;
+  booking_groups?: event_group[];
+  sports_typeId?: number;
+  fee?: number;
   description?: string;
+  images_url?: string[];
 }
 
 
@@ -98,7 +100,7 @@ export const deleteEvent = async (id: number) => {
   });
   return await response.json();
 }
-export const createEvent = async (body: createEventBody) => {
+export const upsertEvent = async (body: upsertEventBody) => {
   const response = await fetch(`/api/events`, {
     method: "POST",
     body: JSON.stringify(body),

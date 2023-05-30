@@ -59,6 +59,7 @@ model social_event {
   is_template    Boolean          @default(false)
   fee            Int?             @default(0)
   description    String?
+  images_url     String[]         @default([])
 }
 
 model social_booking {

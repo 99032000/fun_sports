@@ -17,6 +17,9 @@ export async function DELETE(req: NextRequest, {
   const userId = session?.user.id;
   const id = parseInt(params.id);
   try {
+    if (!userId) {
+      throw new Error("no authenticated user");
+    }
     const result = await prisma.organization.delete({
       where: {
         id,
