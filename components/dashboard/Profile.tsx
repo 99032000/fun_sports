@@ -76,7 +76,6 @@ const Profile = ({
       });
       return comparedList.length === 0;
     });
-    console.log(deleteHobbies);
 
     // if no change hobbies and user info return toast
     if (
