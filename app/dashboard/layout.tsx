@@ -8,7 +8,7 @@ export default async function DashboardLayout({
   const session = await getSession();
   if (!session) redirect("/");
   return (
-    <section className=" max-w-7xl mx-auto bg-base-100 mt-4 px-4">
+    <section className=" max-w-7xl mx-auto bg-transparent mt-4 px-4">
       {children}
     </section>
   );

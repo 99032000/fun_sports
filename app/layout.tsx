@@ -5,6 +5,7 @@ import { Inter } from "next/font/google";
 import { Toaster } from "react-hot-toast";
 import { getSession } from "@/lib/client/supabaseServer";
 import prisma from "@/lib/client/prismaClient";
+import Image from "next/image";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
@@ -29,10 +30,18 @@ export default async function RootLayout({
   return (
     <html lang="en" data-theme="cupcake">
       <SupabaseProvider session={session}>
-        <body className="">
+        <body className="relative">
           <Toaster />
           <NavBar session={session} user={user} />
-          {children}
+          <section className="mx-auto mt-4 px-4 bg-transparent h-[100vh]">
+            <Image
+              src="/images/background.jpg"
+              fill
+              alt="background"
+              className=" -z-10 object-cover"
+            />
+            {children}
+          </section>
         </body>
       </SupabaseProvider>
     </html>

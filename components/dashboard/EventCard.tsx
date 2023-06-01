@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 import { Key, useState } from "react";
 import toast from "react-hot-toast";
 import { AiFillDelete, AiFillEdit } from "react-icons/ai";
-
+import ImageModal from "../common/ImageModal";
 const EventCard = ({
   event,
   sports_types,
@@ -116,19 +116,24 @@ const EventCard = ({
 
   const imageList = () =>
     event.images_url.map((url, index) => (
-      <Image
-        src={url}
-        alt="image"
-        key={index}
-        width={128}
-        height={128}
-        className=" rounded-xl "
-      />
+      <div key={index}>
+        <ImageModal url={url} />
+        <label htmlFor={url}>
+          <Image
+            src={url}
+            alt="image"
+            width={128}
+            height={128}
+            className="rounded-xl "
+          />
+        </label>
+      </div>
     ));
 
   return (
     <div className="card bg-base-100 max-w-md shadow-xl p-4 flex flex-col gap-4 w-full sm:min-w-[350px]">
       {modalElement()}
+      {}
       <div className="flex justify-between">
         <div className="flex gap-2">
           <h1 className=" text-2xl my-auto">{event.name}</h1>
