@@ -33,7 +33,7 @@ export default async function RootLayout({
         <body className="relative">
           <Toaster />
           <NavBar session={session} user={user} />
-          <section className="mx-auto mt-4 px-4 bg-transparent h-[100vh]">
+          <section className="mx-auto mt-4 px-4 bg-transparent min-h-[100vh]">
             <Image
               src="/images/background.jpg"
               fill

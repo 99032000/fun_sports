@@ -107,7 +107,7 @@ const Page = ({ sports_types }: { sports_types: sports_type[] }) => {
     });
   };
   return (
-    <div className="relative flex flex-col justify-center h-full overflow-hidden bg-base-100 p-4 ">
+    <div className="relative flex flex-col justify-center h-full overflow-hidden bg-transparent p-4 ">
       <div className="w-full p-6 m-auto bg-white rounded-md shadow-md lg:max-w-xl">
         <h1 className="text-3xl font-semibold text-center text-primary">
           Fun Social
