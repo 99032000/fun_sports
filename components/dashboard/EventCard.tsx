@@ -10,6 +10,8 @@ import { Key, useState } from "react";
 import toast from "react-hot-toast";
 import { AiFillDelete, AiFillEdit } from "react-icons/ai";
 import ImageModal from "./ImageModal";
+import { toLocalTimeString } from "@/utility/Date";
+
 const EventCard = ({
   event,
   sports_types,
@@ -19,10 +21,6 @@ const EventCard = ({
 }) => {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const toLocalTimeString = (timeStamp: Date) => {
-    const dateStamp = new Date(timeStamp);
-    return dateStamp.toLocaleString("en-AU");
-  };
   const getSportsTypeName = (id: number) => {
     return sports_types.find((type) => type.id === id)?.name;
   };

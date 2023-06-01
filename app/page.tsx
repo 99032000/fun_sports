@@ -9,6 +9,7 @@ export default async function Page() {
       date: true,
       sports_type: true,
       fee: true,
+      venue_name: true,
       organization: {
         select: {
           avatar_url: true,

@@ -4,7 +4,11 @@ export const hoursList = [
 export const minsList = [0, 15, 30, 45]
 
 export const StringtoTimestamp = (strDate: string) => {
-
   const dt = new Date(strDate).getTime();
   return dt / 1000;
 }
+
+export const toLocalTimeString = (timeStamp: Date) => {
+  const dateStamp = new Date(timeStamp);
+  return dateStamp.toLocaleString("en-AU");
+};
