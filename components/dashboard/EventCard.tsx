@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 import { Key, useState } from "react";
 import toast from "react-hot-toast";
 import { AiFillDelete, AiFillEdit } from "react-icons/ai";
-import ImageModal from "../common/ImageModal";
+import ImageModal from "./ImageModal";
 const EventCard = ({
   event,
   sports_types,
