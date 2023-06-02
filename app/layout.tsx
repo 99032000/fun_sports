@@ -31,15 +31,15 @@ export default async function RootLayout({
     <html lang="en" data-theme="cupcake">
       <SupabaseProvider session={session}>
         <body className="relative">
+          <Image
+            src="/images/background.jpg"
+            fill
+            alt="background"
+            className=" -z-10 object-cover"
+          />
           <Toaster />
           <NavBar session={session} user={user} />
           <section className="mx-auto mt-4 px-4 bg-transparent min-h-screen">
-            <Image
-              src="/images/background.jpg"
-              fill
-              alt="background"
-              className=" -z-10 object-cover"
-            />
             {children}
           </section>
         </body>

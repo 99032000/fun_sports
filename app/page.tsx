@@ -13,6 +13,7 @@ export default async function Page() {
       organization: {
         select: {
           avatar_url: true,
+          is_verified: true,
         },
       },
     },
