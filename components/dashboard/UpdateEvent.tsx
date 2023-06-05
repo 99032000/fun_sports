@@ -10,7 +10,6 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "react-hot-toast";
 import Datepicker from "react-tailwindcss-datepicker";
 import EventGroupDetails from "./UpdateEventGroupDetails";
-import path from "path";
 
 type props = {
   userId: string;

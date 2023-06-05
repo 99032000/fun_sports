@@ -190,11 +190,12 @@ const Page = ({ sports_types }: { sports_types: sports_type[] }) => {
           : null}
         <button
           className={
-            "btn btn-block btn-primary my-8 shadow" +
-            (loading ? " disabled loading" : "")
+            "btn btn-block btn-primary my-8 shadow " +
+            (loading ? " btn-disabled" : "")
           }
           onClick={handleSubmit}
         >
+          {loading && <span className="loading loading-spinner"></span>}
           Sign Up
         </button>
 
