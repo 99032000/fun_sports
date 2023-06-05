@@ -168,8 +168,7 @@ function UpdateEvent({ event }: { event: social_event }) {
     const newImagesList = images.filter((image) => {
       return typeof image !== "string" ? true : false;
     });
-    console.log(oldImagesList);
-    console.log(newImagesList);
+
     const preList = ["image0", "image1", "image2"];
 
     // find images should delete
