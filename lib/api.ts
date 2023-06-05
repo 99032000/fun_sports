@@ -24,6 +24,7 @@ export type upsertOrganizationBody = {
   avatar_url?: string;
 }
 export type event_group = {
+  id?: number;
   name: string;
   amount: number;
   booking_amount: number;

@@ -33,12 +33,12 @@ const EventCard = ({
     } else {
       toast.error("fail to delete event.");
     }
-    document.getElementById("event_card")?.click();
+    document.getElementById(`${event.id}+"event_card"`)?.click();
     setLoading(false);
   };
   const handleCloseOnClick = (e: { preventDefault: () => void }) => {
     e.preventDefault();
-    document.getElementById("event_card")?.click();
+    document.getElementById(`${event.id}+"event_card"`)?.click();
   };
 
   const groupDetails = (list: any) => (
@@ -80,7 +80,11 @@ const EventCard = ({
 
   const modalElement = () => (
     <>
-      <input type="checkbox" id="event_card" className="modal-toggle" />
+      <input
+        type="checkbox"
+        id={`${event.id}+"event_card"`}
+        className="modal-toggle"
+      />
       <div className="modal">
         <div className="modal-box">
           <h3 className="font-bold text-lg">
@@ -148,7 +152,7 @@ const EventCard = ({
             </Link>
           </div>
           <div className="tooltip tooltip-secondary" data-tip="Delete">
-            <label htmlFor="event_card">
+            <label htmlFor={`${event.id}+"event_card"`}>
               <AiFillDelete className=" text-secondary text-2xl cursor-pointer" />
             </label>
           </div>

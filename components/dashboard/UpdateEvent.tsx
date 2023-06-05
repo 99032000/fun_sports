@@ -1,15 +1,16 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
-import { event_group } from "@/lib/api";
+import { event_group, upsertEvent, upsertEventBody } from "@/lib/api";
 import { hoursList, minsList } from "@/utility/Date";
 import type { organization, social_event, sports_type } from "@prisma/client";
 import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "react-hot-toast";
 import Datepicker from "react-tailwindcss-datepicker";
-import UpdateEventGroupDetails from "./UpdateEventGroupDetail";
+import EventGroupDetails from "./UpdateEventGroupDetails";
+import path from "path";
 
 type props = {
   userId: string;
@@ -35,7 +36,6 @@ function UpdateEvent({ event }: { event: social_event }) {
     startDate: null,
     endDate: null,
   });
-  const [name, setName] = useState("");
   const [group, setGroup] = useState<event_group[]>([]);
   const nameRef = useRef<HTMLInputElement>(null);
   const hourRef = useRef<HTMLSelectElement>(null);
@@ -44,25 +44,178 @@ function UpdateEvent({ event }: { event: social_event }) {
   const venueRef = useRef<HTMLInputElement>(null);
   const feeRef = useRef<HTMLInputElement>(null);
   const descriptionRef = useRef<HTMLTextAreaElement>(null);
-  const time = new Date(event.date);
+  const time = useMemo(() => new Date(event.date), [event.date]);
   const hours = time.getHours();
   const minutes = time.getMinutes();
+  const [images, setImages] = useState<any[]>([]);
   useEffect(() => {
     nameRef.current!.value = event.name;
     addressRef.current!.value = event.address;
     venueRef.current!.value = event.venue_name || "";
     feeRef.current!.value = event.fee!.toString();
     descriptionRef.current!.value = event.description || "";
-
+    hourRef.current!.value = time.getHours().toString();
+    minRef.current!.value = time.getMinutes().toString();
+    setGroup(event.booking_groups! as event_group[]);
+    setImages(event.images_url);
     setDate({
       startDate: time,
       endDate: time,
     });
-  }, [event]);
+  }, [event, time]);
+
   const handleDateChange = (newValue: any) => {
     setDate(newValue);
   };
+  const handleDeleteImageOnClick = (imageName: any) => {
+    setImages((pre) =>
+      images.filter((image) => {
+        if (imageName.name) {
+          return image.name !== imageName.name;
+        } else {
+          return image !== imageName;
+        }
+      })
+    );
+  };
+  const uploadImages = async (e: any) => {
+    const files = e.target.files as any[];
+    if (files.length > 0) {
+      for (let image of files) {
+        if (image.size > 6291456) {
+          toast.error("upload image cannot be larger than 6MB");
+          return;
+        }
+      }
+      setImages((pre) => [...pre, ...files]);
+    }
+  };
+  const handleUpadteButtonOnClick = async () => {
+    const hours = parseInt(hourRef.current!.value);
+    const mins = parseInt(minRef.current!.value);
+    const address = addressRef.current!.value;
+    const name = nameRef.current!.value;
+    const fee = parseInt(feeRef.current!.value);
+    // form validation
+    if (name === "") {
+      toast.error("Please enter event name");
+      return;
+    }
+    if (!date.startDate) {
+      toast.error("Please enter event date");
+      return;
+    }
+    if (hours < 0 || mins < 0) {
+      toast.error("Please enter time");
+      return;
+    }
+    if (address.length === 0) {
+      toast.error("Please enter address");
+      return;
+    }
+    if (Number.isNaN(fee) || fee < 0) {
+      toast.error("make sure the fee is greater or equals to  zero");
+      return;
+    }
+    if (images.length > 3) {
+      toast.error("images can not exceed than 3");
+      return;
+    }
+    if (group.length === 0) {
+      toast.error("please add a group");
+      return;
+    }
+    for (let item of group) {
+      if (item.name.length < 1) {
+        toast.error("each group must have a name");
+        return;
+      }
+      if (item.amount < 1) {
+        toast.error("amount must be greater than 0");
+        return;
+      }
+      if (item.amount < item.booking_amount) {
+        toast.error("group amount can not less than booking_amount");
+      }
+    }
+    // update event start
+    setLoading(true);
+    const timeStamp = new Date(
+      `${date.startDate.toDateString()} ${hours}:${mins}`
+    );
+    const body: upsertEventBody = {
+      id: event.id,
+      name,
+      address,
+      venue_name:
+        venueRef.current!.value === "" ? undefined : venueRef.current!.value,
+      date: timeStamp,
+      booking_groups: group,
+      fee,
+    };
+    if (descriptionRef.current!.value.length > 0) {
+      body.description = descriptionRef.current!.value;
+    }
+    // const result = await upsertEvent(body);
+    // check if the image is existing
+    const eventId = event.id;
+    const oldImagesList = images.map((image) => {
+      if (typeof image === "string") {
+        return image.split("/").pop();
+      }
+    });
 
+    const newImagesList = images.filter((image) => {
+      return typeof image !== "string" ? true : false;
+    });
+    console.log(oldImagesList);
+    console.log(newImagesList);
+    const preList = ["image0", "image1", "image2"];
+
+    // find images should delete
+    const deleteList = preList.filter((list) => {
+      const result = oldImagesList.find((oldImage) => oldImage === list);
+      return result ? false : true;
+    });
+    // add old images url to list
+    let urlList: string[] = [];
+    images.forEach((image) => {
+      typeof image === "string" && urlList.push(image);
+    });
+    // remove old images url from bucket
+    if (deleteList.length > 0) {
+      // delete images from bucket
+      const pathnames = deleteList.map((list) => `${eventId}/${list}`);
+      await supabase.storage.from("events").remove(pathnames);
+    }
+    // upload new images to bucket
+    const uploadPromises = newImagesList.map((image) => {
+      const newPath = deleteList.pop();
+      return supabase.storage
+        .from("events")
+        .upload(`${eventId}/${newPath}`, image);
+    });
+    const imagePaths = await Promise.all(uploadPromises);
+
+    // get new images url from bucket
+    imagePaths.forEach((path) => {
+      if (!path.error) {
+        const url = supabase.storage
+          .from("events")
+          .getPublicUrl(path.data.path);
+        urlList.push(url.data.publicUrl);
+      }
+    });
+    body.images_url = urlList;
+    const updateResult = await upsertEvent(body);
+    if (updateResult.success) {
+      toast.success("update event successfully");
+      router.refresh();
+    } else {
+      toast.error("update event failed");
+    }
+    setLoading(false);
+  };
   const eventInfo = () => (
     <>
       <div className="grid grid-cols-1 grid-flow-row-dense auto-cols-max gap-4 lg:grid-cols-2">
@@ -158,7 +311,44 @@ function UpdateEvent({ event }: { event: social_event }) {
           ></textarea>
         </div>
       </div>
-      <UpdateEventGroupDetails group={group} setGroup={setGroup} />
+      <div className="flex flex-row gap-4 mt-8 flex-wrap">
+        <div className="mockup-code  bg-primary text-primary-content w-full text-sm">
+          <pre data-prefix=">">
+            <code>Image can not exceed 6MB</code>
+          </pre>
+        </div>
+        <h2 className=" my-auto text-sm sm:text-lg">Upload avatar:</h2>
+        <input
+          type="file"
+          className="file-input file-input-bordered file-input-primary w-full max-w-xs file-input-sm md:file-input-md"
+          onChange={uploadImages}
+          accept="image/*"
+          multiple
+        />
+      </div>
+      {images.length > 0 && (
+        <div className="flex gap-6 mt-8 flex-wrap">
+          {images.map((image, index) => (
+            <div className="indicator" key={image.name ?? image}>
+              <span
+                className="indicator-item badge badge-secondary cursor-pointer w-10 h-8"
+                onClick={() => handleDeleteImageOnClick(image)}
+              >
+                X
+              </span>
+
+              <img
+                src={
+                  typeof image === "string" ? image : URL.createObjectURL(image)
+                }
+                alt="your image"
+                className=" w-36 h-28 rounded-xl object-cover"
+              />
+            </div>
+          ))}
+        </div>
+      )}
+      <EventGroupDetails group={group} setGroup={setGroup} />
     </>
   );
   return (
@@ -172,12 +362,12 @@ function UpdateEvent({ event }: { event: social_event }) {
             <a>Event</a>
           </li>
           <li>
-            <a>New Event</a>
+            <a>Update Event</a>
           </li>
         </ul>
       </div>
       <div className=" mt-4 w-full p-6 m-auto bg-white rounded-md shadow-md">
-        <h1 className=" text-xl">New Event</h1>
+        <h1 className=" text-xl">Update Event</h1>
         {eventInfo()}
 
         <div className="flex sm:justify-end justify-start">
@@ -186,8 +376,9 @@ function UpdateEvent({ event }: { event: social_event }) {
               "btn btn-primary mt-8 shadow" +
               (loading ? " disabled loading" : "")
             }
+            onClick={handleUpadteButtonOnClick}
           >
-            Create
+            Update
           </button>
         </div>
       </div>

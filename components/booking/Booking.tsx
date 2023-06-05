@@ -64,6 +64,7 @@ function Booking({ event, userId }: props) {
             <div className="flex gap-4 flex-wrap">{imageList()}</div>
           )}
         </div>
+        <div className="divider"></div>
         <div className="flex sm:justify-end justify-start">
           <button
             className={

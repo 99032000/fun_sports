@@ -1,7 +1,7 @@
 "use client";
 import { event_group } from "@/lib/api";
 import { ChangeEvent, Dispatch, SetStateAction } from "react";
-import { AiOutlineClose, AiOutlinePlus } from "react-icons/ai";
+import { AiOutlinePlus } from "react-icons/ai";
 
 type Props = {
   group: event_group[];
@@ -35,11 +35,7 @@ const UpdateEventGroupDetails = ({ group, setGroup }: Props) => {
       return pre;
     });
   };
-  const handleDeleteOnClick = (index: number) => {
-    const newGroup = [...group];
-    newGroup.splice(index, 1);
-    setGroup(newGroup);
-  };
+
   return (
     <>
       <div className="flex gap-4 md:mt-8 mt-4 w-full">
@@ -77,13 +73,21 @@ const UpdateEventGroupDetails = ({ group, setGroup }: Props) => {
                     type="number"
                     className="input input-bordered w-full input-sm max-w-[100px] input-primary"
                     defaultValue={item.amount}
+                    min={item.booking_amount}
                     onChange={(e) => handleGroupAmount(e, index)}
                   />
                 </div>
-                <div className=" flex flex-col justify-end">
-                  <AiOutlineClose
-                    className="w-6 h-6 bg-primary text-white rounded-full cursor-pointer"
-                    onClick={() => handleDeleteOnClick(index)}
+                <div className="md:mt-8 mt-4">
+                  {index === 0 && (
+                    <h2 className=" my-auto text-sm sm:text-lg mb-2">
+                      Booked:*
+                    </h2>
+                  )}
+                  <input
+                    type="number"
+                    className="input input-bordered w-full input-sm max-w-[100px] input-primary"
+                    defaultValue={item.booking_amount}
+                    disabled
                   />
                 </div>
               </div>

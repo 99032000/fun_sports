@@ -36,20 +36,23 @@ const NavBar = ({
     toast.success("Logged out successfully");
     router.refresh();
   };
-
+  const handleOnClick = () => {
+    const doc = document.body;
+    doc.blur();
+  };
   const getTitles = () => {
     let titles = titleList;
     if (pathName.startsWith("/dashboard")) titles = dashboardTitleList;
     return titles.map((title, index) => (
-      <li key={index}>
+      <li key={index} onClick={handleOnClick}>
         <Link href={title.href}>{title.name}</Link>
       </li>
     ));
   };
   //!TODO close dropdown after click on
   return (
-    <div className="navbar bg-base-100 shadow-lg z-10">
-      <div className="navbar-start">
+    <div className="navbar bg-base-100 shadow-lg z-20">
+      <div className="navbar-start z-50">
         <div className="dropdown">
           <label tabIndex={0} className="btn btn-ghost lg:hidden">
             <svg
@@ -90,7 +93,7 @@ const NavBar = ({
       </div>
       <div className="navbar-end">
         {session ? (
-          <div className="dropdown dropdown-bottom dropdown-end cursor-pointer">
+          <div className="dropdown dropdown-bottom dropdown-end cursor-pointer z-50">
             <div className="avatar placeholder" tabIndex={0}>
               <div className=" bg-primary text-white rounded-full w-12 hover:bg-primary-focus">
                 <span className=" text-lg">

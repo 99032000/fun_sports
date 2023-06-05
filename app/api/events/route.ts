@@ -27,9 +27,11 @@ export async function POST(req: NextRequest) {
         }
       })
     } else {
+      const id = body.id;
+      delete body.id;
       result = await prisma.social_event.update({
         where: {
-          id: body.id
+          id: id
         },
       data: body
     });
