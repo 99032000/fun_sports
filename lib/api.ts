@@ -28,6 +28,7 @@ export type event_group = {
   name: string;
   amount: number;
   booking_amount: number;
+  price: number;
 };
 export type upsertEventBody = {
   id?: number;
