@@ -81,7 +81,7 @@ function NewEvent({ userId, organizations, sports_types }: props) {
     const hours = parseInt(hourRef.current!.value);
     const mins = parseInt(minRef.current!.value);
     const address = addressRef.current!.value;
-    const fee = parseInt(feeRef.current!.value);
+    const fee = parseFloat(parseFloat(feeRef.current!.value).toFixed(2));
     const org = organizations.find(
       (org) => org.id === parseInt(orgRef.current!.value)
     );
@@ -194,10 +194,10 @@ function NewEvent({ userId, organizations, sports_types }: props) {
     <>
       <div className="grid grid-cols-1 grid-flow-row-dense auto-cols-max gap-4 lg:grid-cols-2">
         {organizations.length > 0 && (
-          <div className="flex flex-row gap-4 mt-8">
+          <div className="flex flex-row gap-4 mt-8 flex-wrap">
             <h2 className=" my-auto text-sm sm:text-lg">Organization:*</h2>
             <select
-              className="select w-full max-w-max sm:max-w-[300px] md:max-w-[350px] select-primary select-sm"
+              className="select max-w-max sm:max-w-[300px] md:max-w-[350px] select-primary select-sm text-xs sm:text-sm"
               defaultValue={-1}
               ref={orgRef}
               onChange={handleOrganizationSelectOnChange}
@@ -241,9 +241,9 @@ function NewEvent({ userId, organizations, sports_types }: props) {
         </div>
         <div className="flex flex-row gap-4 md:mt-8 mt-4 flex-wrap">
           <h2 className=" my-auto text-sm sm:text-lg ">Time:*</h2>
-          <div className="flex gap-4">
+          <div className="flex gap-4 flex-wrap">
             <select
-              className="select w-full max-w-fit select-primary select-sm"
+              className="select w-full max-w-fit select-primary select-sm text-xs sm:text-sm"
               defaultValue={-1}
               ref={hourRef}
             >
@@ -257,7 +257,7 @@ function NewEvent({ userId, organizations, sports_types }: props) {
               ))}
             </select>
             <select
-              className="select w-full max-w-fit select-primary select-sm"
+              className="select w-full max-w-fit select-primary select-sm text-xs sm:text-sm"
               defaultValue={-1}
               ref={minRef}
             >
@@ -272,10 +272,10 @@ function NewEvent({ userId, organizations, sports_types }: props) {
             </select>
           </div>
         </div>
-        <div className="flex flex-row gap-4 md:mt-8 mt-4">
+        <div className="flex flex-row gap-4 md:mt-8 mt-4 flex-wrap">
           <h2 className=" my-auto text-sm sm:text-lg">Sports_type:*</h2>
           <select
-            className="select w-full max-w-fit sm:max-w-[300px] md:max-w-[350px] select-primary select-sm"
+            className="select w-full max-w-fit sm:max-w-[300px] md:max-w-[350px] select-primary select-sm text-xs sm:text-sm"
             disabled={true}
             value={sportTypeValue}
           >
@@ -324,12 +324,15 @@ function NewEvent({ userId, organizations, sports_types }: props) {
         </div>
       </div>
       <div className="flex flex-row gap-4 mt-8 flex-wrap">
-        <div className="mockup-code  bg-primary text-primary-content w-full">
+        <div className="mockup-code  bg-primary text-primary-content w-full text-xs sm:text-sm">
           <pre data-prefix=">">
-            <code>Image can not exceed 6MB</code>
+            <code>Image can not exceed 6MB.</code>
+          </pre>
+          <pre data-prefix=">">
+            <code>You can upload upto 3 images.</code>
           </pre>
         </div>
-        <h2 className=" my-auto text-sm sm:text-lg">Upload avatar:</h2>
+        <h2 className=" my-auto text-sm sm:text-lg">Upload Event Images:</h2>
         <input
           type="file"
           className="file-input file-input-bordered file-input-primary w-full max-w-xs file-input-sm md:file-input-md"

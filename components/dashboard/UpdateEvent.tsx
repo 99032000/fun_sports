@@ -94,7 +94,7 @@ function UpdateEvent({ event }: { event: social_event }) {
     const mins = parseInt(minRef.current!.value);
     const address = addressRef.current!.value;
     const name = nameRef.current!.value;
-    const fee = parseInt(feeRef.current!.value);
+    const fee = parseFloat(parseFloat(feeRef.current!.value).toFixed(2));
     // form validation
     if (name === "") {
       toast.error("Please enter event name");
@@ -208,7 +208,7 @@ function UpdateEvent({ event }: { event: social_event }) {
     const updateResult = await upsertEvent(body);
     if (updateResult.success) {
       toast.success("update event successfully");
-      router.refresh();
+      router.replace("/dashboard/event");
     } else {
       toast.error("update event failed");
     }
