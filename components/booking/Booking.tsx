@@ -65,6 +65,7 @@ function Booking({ event, userId }: props) {
             <tr>
               <th>Name</th>
               <th>Available</th>
+              <th>Price</th>
               <th>Book</th>
             </tr>
           </thead>
@@ -74,6 +75,7 @@ function Booking({ event, userId }: props) {
                 <tr key={index}>
                   <td>{item.name}</td>
                   <td>{item.amount - item.booking_amount}</td>
+                  <td>{item.price}</td>
                   <td>
                     {
                       <input
@@ -97,7 +99,14 @@ function Booking({ event, userId }: props) {
     if (bookingInfo.length === 0) return;
     setLoading(true);
     const result = await bookEvent(bookingInfo, event.id);
-    console.log(result);
+    if (result.success) {
+      setLoading(false);
+      toast.success("Book was successfully 🥹");
+      router.back();
+    } else {
+      toast.error(result.message);
+      router.refresh();
+    }
     setLoading(false);
   };
   return (
