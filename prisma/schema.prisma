@@ -57,9 +57,10 @@ model social_event {
   organization   organization?    @relation(fields: [organizationId], references: [id])
   organizationId Int?
   is_template    Boolean          @default(false)
-  fee            Int?             @default(0)
+  fee            Float?           @default(0)
   description    String?
   images_url     String[]         @default([])
+  is_private     Boolean          @default(false)
 }
 
 model social_booking {
@@ -71,6 +72,8 @@ model social_booking {
   booking_info    Json
   social_events   social_event @relation(fields: [social_eventsId], references: [id])
   user            user         @relation(fields: [userId], references: [id])
+  is_Paid         Boolean      @default(false)
+  paidAmount      Float?
 }
 
 model payments {

@@ -1,0 +1,8 @@
+-- AlterTable
+ALTER TABLE "social_booking" ADD COLUMN     "is_Paid" BOOLEAN NOT NULL DEFAULT false,
+ADD COLUMN     "paidAmount" DOUBLE PRECISION;
+
+-- AlterTable
+ALTER TABLE "social_event" ADD COLUMN     "is_private" BOOLEAN NOT NULL DEFAULT false,
+ALTER COLUMN "fee" SET DEFAULT 0,
+ALTER COLUMN "fee" SET DATA TYPE DOUBLE PRECISION;

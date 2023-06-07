@@ -43,7 +43,10 @@ export type upsertEventBody = {
   description?: string;
   images_url?: string[];
 }
-
+export type bookingInfo = {
+  id: number;
+  bookAmount: number;
+};
 
 export const getUserByEmail = async (email: string) => {
   const response = await fetch(
@@ -107,5 +110,12 @@ export const upsertEvent = async (body: upsertEventBody) => {
     body: JSON.stringify(body),
   });
   return await response.json();
+}
 
+export const bookEvent = async (body: bookingInfo[], eventId: number) => {
+  const response = await fetch(`/api/events/${eventId}/book`, {
+    method: "POST",
+    body: JSON.stringify(body),
+  });
+  return await response.json();
 }
