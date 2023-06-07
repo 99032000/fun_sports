@@ -9,12 +9,16 @@ import Link from "next/link";
 const Login = ({ redirectUrl }: { redirectUrl: string | undefined }) => {
   const emailRef = useRef<HTMLInputElement | null>(null);
   const passwordRef = useRef<HTMLInputElement | null>(null);
+  const [loading, setLoading] = useState<Boolean>(false);
   const [supabase] = useState(() => createBrowserSupabaseClient());
   // auth variables
   const auth = supabase.auth;
   const router = useRouter();
   const handleSignIn = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
+    if (loading) {
+      return;
+    }
     const email = emailRef.current?.value;
     const password = passwordRef.current?.value;
     // if no email or password, return
@@ -29,15 +33,17 @@ const Login = ({ redirectUrl }: { redirectUrl: string | undefined }) => {
       toast.error("Password is not valid");
       return;
     }
-
+    setLoading(true);
     const result = await auth.signInWithPassword({
       email: email,
       password: password,
     });
     if (result.error) {
       toast.error(result.error.message);
+      setLoading(false);
       return;
     }
+    setLoading(false);
     router.replace("/");
   };
   const handleForgotPasswordClick = async (e: {
@@ -107,9 +113,13 @@ const Login = ({ redirectUrl }: { redirectUrl: string | undefined }) => {
           </button>
           <div className=" mt-8">
             <button
-              className="btn btn-primary btn-block"
+              className={
+                "btn btn-primary my-8 shadow btn-block" +
+                (loading ? " btn-disabled" : "")
+              }
               onClick={handleSignIn}
             >
+              {loading && <span className="loading loading-spinner"></span>}
               Login
             </button>
             <Link href="signup">
