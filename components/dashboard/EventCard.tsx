@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
-import { deleteEvent } from "@/lib/api";
+import { deleteEvent, event_group } from "@/lib/api";
 import type { social_event, sports_type } from "@prisma/client";
 import Image from "next/image";
 import Link from "next/link";
@@ -41,7 +41,7 @@ const EventCard = ({
     document.getElementById(`${event.id}+"event_card"`)?.click();
   };
 
-  const groupDetails = (list: any) => (
+  const groupDetails = (list: event_group[]) => (
     <div className="overflow-x-auto">
       <table className="table w-full table-compact">
         {/* head */}
@@ -50,29 +50,20 @@ const EventCard = ({
             <th>Name</th>
             <th>Amount</th>
             <th>Booked Amount</th>
+            <th>Price</th>
           </tr>
         </thead>
         <tbody>
-          {list.map(
-            (
-              item: {
-                name: string;
-
-                amount: string;
-
-                booking_amount: string;
-              },
-              index: Key | null | undefined
-            ) => {
-              return (
-                <tr key={index}>
-                  <td>{item.name}</td>
-                  <td>{item.amount}</td>
-                  <td>{item.booking_amount}</td>
-                </tr>
-              );
-            }
-          )}
+          {list.map((item, index) => {
+            return (
+              <tr key={index}>
+                <td>{item.name}</td>
+                <td>{item.amount}</td>
+                <td>{item.booking_amount}</td>
+                <td>{item.price}</td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </div>
@@ -185,7 +176,7 @@ const EventCard = ({
       <div className="">
         <h1>Group detail</h1>
         <h2 className=" mt-2 break-words">
-          {groupDetails(event.booking_groups!)}
+          {groupDetails(event.booking_groups! as event_group[])}
         </h2>
       </div>
       {event.images_url.length > 0 && (

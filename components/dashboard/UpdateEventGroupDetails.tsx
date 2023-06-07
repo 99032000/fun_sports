@@ -15,6 +15,7 @@ const UpdateEventGroupDetails = ({ group, setGroup }: Props) => {
         name: "",
         amount: 1,
         booking_amount: 0,
+        price: 0,
       },
     ]);
   };
@@ -32,6 +33,17 @@ const UpdateEventGroupDetails = ({ group, setGroup }: Props) => {
       const amount = parseInt(e.target.value);
       if (amount) pre[index].amount = amount;
       else pre[index].amount = 0;
+      return pre;
+    });
+  };
+  const handleGroupPrice = (
+    e: ChangeEvent<HTMLInputElement>,
+    index: number
+  ) => {
+    setGroup((pre) => {
+      const price = parseFloat(parseFloat(e.target.value).toFixed(2));
+      if (price) pre[index].price = price;
+      else pre[index].price = 0;
       return pre;
     });
   };
@@ -75,6 +87,20 @@ const UpdateEventGroupDetails = ({ group, setGroup }: Props) => {
                     defaultValue={item.amount}
                     min={item.booking_amount}
                     onChange={(e) => handleGroupAmount(e, index)}
+                  />
+                </div>
+                <div className="md:mt-8 mt-4">
+                  {index === 0 && (
+                    <h2 className=" my-auto text-sm sm:text-lg mb-2">
+                      Price:*
+                    </h2>
+                  )}
+                  <input
+                    type="number"
+                    className="input input-bordered w-full input-sm max-w-[100px] input-primary"
+                    defaultValue={item.price}
+                    min={0}
+                    onChange={(e) => handleGroupPrice(e, index)}
                   />
                 </div>
                 <div className="md:mt-8 mt-4">
