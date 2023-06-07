@@ -135,6 +135,7 @@ function UpdateEvent({ event }: { event: social_event }) {
       }
       if (item.amount < item.booking_amount) {
         toast.error("group amount can not less than booking_amount");
+        return;
       }
     }
     // update event start
