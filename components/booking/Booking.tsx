@@ -18,7 +18,7 @@ type props = {
 function Booking({ event, userId }: props) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const [booking, setBooking] = useState<bookingInfo[]>([]);
+  const [bookingInfo, setBookingInfo] = useState<bookingInfo[]>([]);
   const imageList = () =>
     event.images_url.map((url, index) => (
       <div key={index}>
@@ -37,7 +37,7 @@ function Booking({ event, userId }: props) {
   const bookInputOnchange = (id: number, e: any) => {
     const bookAmount = parseInt(e.target.value);
     if (Number.isNaN(bookAmount) || bookAmount <= 0) {
-      setBooking((pre) => {
+      setBookingInfo((pre) => {
         const copyPre = [...pre];
         const index = copyPre.findIndex((item) => item.id === id);
         if (index >= 0) {
@@ -47,7 +47,7 @@ function Booking({ event, userId }: props) {
       });
       return;
     }
-    setBooking((pre) => {
+    setBookingInfo((pre) => {
       const copyPre = [...pre];
       const index = copyPre.findIndex((item) => item.id === id);
       if (index < 0 && bookAmount > 0) copyPre.push({ id: id, bookAmount });
@@ -94,8 +94,9 @@ function Booking({ event, userId }: props) {
     );
   };
   const bookOnClick = async () => {
+    if (bookingInfo.length === 0) return;
     setLoading(true);
-    const result = await bookEvent(booking, event.id);
+    const result = await bookEvent(bookingInfo, event.id);
     console.log(result);
     setLoading(false);
   };
