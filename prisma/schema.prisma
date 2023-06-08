@@ -64,16 +64,17 @@ model social_event {
 }
 
 model social_booking {
-  id              Int          @id @default(autoincrement())
-  created_at      DateTime     @default(now())
-  updated_at      DateTime     @default(now()) @updatedAt
-  social_eventsId Int
-  userId          String       @db.Uuid
-  booking_info    Json
-  social_events   social_event @relation(fields: [social_eventsId], references: [id])
-  user            user         @relation(fields: [userId], references: [id])
-  is_Paid         Boolean      @default(false)
-  paidAmount      Float?
+  id                Int          @id @default(autoincrement())
+  created_at        DateTime     @default(now())
+  updated_at        DateTime     @default(now()) @updatedAt
+  social_eventsId   Int
+  userId            String       @db.Uuid
+  booking_info      Json
+  social_events     social_event @relation(fields: [social_eventsId], references: [id])
+  user              user         @relation(fields: [userId], references: [id])
+  is_Paid           Boolean      @default(false)
+  paidAmount        Float?
+  payment_image_url String[]     @default([])
 }
 
 model payments {

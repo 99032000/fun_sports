@@ -60,12 +60,16 @@ export async function POST(req: NextRequest, {
       data: createBooking,
       error: null
     }), { status: 200 });
-  } catch (e: any) {
-    console.error(e);
+  } catch (e) {
+    let error = { message: "unknown error" };
+    if (e instanceof Error) {
+      error.message = e.message;
+    }
     return new Response(JSON.stringify({
       success: false,
       data: null,
-      error: e.message,
+      error: error.message
     }), { status: 400 });
   }
+
 }

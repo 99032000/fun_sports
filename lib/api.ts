@@ -1,3 +1,5 @@
+import { social_booking } from '@prisma/client';
+
 export type updateUserBody = {
   userId: string;
   userInfo: {
@@ -46,8 +48,22 @@ export type upsertEventBody = {
 }
 export type bookingInfo = {
   id: number;
+  name: string;
   bookAmount: number;
+  price: number;
 };
+
+type Peek<T> = {
+  [K in keyof T]: T[K];
+};
+type TypeOmit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
+
+type filteredSocialBooking = TypeOmit<social_booking,
+  'social_eventsId' | 'userId' | "booking_info" | "created_at"
+  | "updated_at">;
+
+export type PeekFilteredSocialBooking = Peek<filteredSocialBooking>;
+
 
 export const getUserByEmail = async (email: string) => {
   const response = await fetch(
@@ -115,6 +131,14 @@ export const upsertEvent = async (body: upsertEventBody) => {
 
 export const bookEvent = async (body: bookingInfo[], eventId: number) => {
   const response = await fetch(`/api/events/${eventId}/book`, {
+    method: "POST",
+    body: JSON.stringify(body),
+  });
+  return await response.json();
+}
+
+export const socialBookUpdate = async (body: PeekFilteredSocialBooking) => {
+  const response = await fetch(`/api/social_booking`, {
     method: "POST",
     body: JSON.stringify(body),
   });
