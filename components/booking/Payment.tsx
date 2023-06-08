@@ -64,7 +64,7 @@ function Payment({ socialBooking }: { socialBooking: social_booking }) {
       payment_image_url: urlList,
     };
     const result = await socialBookUpdate(body);
-    console.log(result);
+
     if (result.success) {
       toast.success("payment updated successfully!");
       router.back();

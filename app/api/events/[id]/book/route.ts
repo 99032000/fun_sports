@@ -46,7 +46,6 @@ export async function POST(req: NextRequest, {
         booking_groups: groups
       }
     });
-    console.log(saveEventGroups);
     const createBooking = await prisma.social_booking.create({
       data: {
         social_eventsId: id,
@@ -54,7 +53,6 @@ export async function POST(req: NextRequest, {
         booking_info: body
       }
     });
-    console.log(createBooking);
     return new Response(JSON.stringify({
       success: true,
       data: createBooking,

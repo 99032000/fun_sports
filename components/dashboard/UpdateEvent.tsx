@@ -3,22 +3,13 @@
 
 import { event_group, upsertEvent, upsertEventBody } from "@/lib/api";
 import { hoursList, minsList } from "@/utility/Date";
-import type { organization, social_event, sports_type } from "@prisma/client";
+import type { social_event } from "@prisma/client";
 import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "react-hot-toast";
 import Datepicker from "react-tailwindcss-datepicker";
 import EventGroupDetails from "./UpdateEventGroupDetails";
-
-type props = {
-  userId: string;
-  organizations: organization[];
-  sports_types: sports_type[];
-};
-
-//? supabase upload image
-// {data: null, error: {…}}
 
 function UpdateEvent({ event }: { event: social_event }) {
   const [supabase] = useState(() => createBrowserSupabaseClient());

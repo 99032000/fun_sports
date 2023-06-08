@@ -10,8 +10,6 @@ type props = {
   userId: string;
   sports_types: sports_type[];
 };
-//? supabase upload image
-// {data: null, error: {…}}
 
 function NewOrganization({ userId, sports_types }: props) {
   const [supabase] = useState(() => createBrowserSupabaseClient());
