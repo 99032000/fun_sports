@@ -1,7 +1,7 @@
 "use client";
 
 import { event_group } from "@/lib/api";
-import { social_booking, social_event } from "@prisma/client";
+import type { social_booking, social_event } from "@prisma/client";
 import { useState } from "react";
 import ChooseGroup from "./ChooseGroup";
 import Payment from "./Payment";

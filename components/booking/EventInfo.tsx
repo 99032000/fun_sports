@@ -1,5 +1,5 @@
 import { toLocalTimeString } from "@/utility/Date";
-import { social_event } from "@prisma/client";
+import type { social_event } from "@prisma/client";
 import ImageModal from "../dashboard/ImageModal";
 import Image from "next/image";
 function EventInfo({ event }: { event: social_event }) {
