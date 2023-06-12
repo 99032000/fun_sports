@@ -1,6 +1,6 @@
 import type { social_event } from "@prisma/client";
-import EventInfo from "./EventInfo";
-import BookingProcess from "./BookingProcess";
+import EventInfo from "../../components/booking/EventInfo";
+import BookingProcess from "../../components/booking/BookingProcess";
 type props = {
   event: social_event;
   userId: string;

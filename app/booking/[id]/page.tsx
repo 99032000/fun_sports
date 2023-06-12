@@ -1,5 +1,5 @@
 import NotFound from "@/components/booking/NotFound";
-import Booking from "@/components/booking/Booking";
+import Booking from "@/modules/booking/Booking";
 import prisma from "@/lib/client/prismaClient";
 import { getSession } from "@/lib/client/supabaseServer";
 export default async function Page({ params }: { params: { id: string } }) {
