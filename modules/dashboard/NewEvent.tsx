@@ -9,16 +9,13 @@ import { useRouter } from "next/navigation";
 import { ChangeEvent, useRef, useState } from "react";
 import { toast } from "react-hot-toast";
 import Datepicker from "react-tailwindcss-datepicker";
-import EventGroupDetails from "./EventGroupDetails";
+import EventGroupDetails from "../../components/dashboard/EventGroupDetails";
 
 type props = {
   userId: string;
   organizations: organization[];
   sports_types: sports_type[];
 };
-
-//? supabase upload image
-// {data: null, error: {…}}
 
 function NewEvent({ userId, organizations, sports_types }: props) {
   const [supabase] = useState(() => createBrowserSupabaseClient());

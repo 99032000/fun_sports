@@ -20,6 +20,11 @@ export default async function Page() {
     orderBy: {
       date: "desc",
     },
+    where: {
+      date: {
+        gte: new Date(),
+      },
+    },
   });
   return <Home events={events} />;
 }

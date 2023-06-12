@@ -1,6 +1,6 @@
 import prisma from "@/lib/client/prismaClient";
 import { getSession } from "@/lib/client/supabaseServer";
-import NewEvent from "@/components/dashboard/NewEvent";
+import NewEvent from "@/modules/dashboard/NewEvent";
 import { getSportsType } from "@/lib/serverSideApi";
 const Page = async () => {
   const session = await getSession();

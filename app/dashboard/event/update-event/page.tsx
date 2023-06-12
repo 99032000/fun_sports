@@ -1,6 +1,4 @@
 import prisma from "@/lib/client/prismaClient";
-import { getSession } from "@/lib/client/supabaseServer";
-import NewEvent from "@/components/dashboard/NewEvent";
 import { redirect } from "next/navigation";
 import UpdateEvent from "@/components/dashboard/UpdateEvent";
 const Page = async ({
