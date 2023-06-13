@@ -6,7 +6,7 @@ import type { social_event, sports_type } from "@prisma/client";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Key, useState } from "react";
+import { useState } from "react";
 import toast from "react-hot-toast";
 import { AiFillDelete, AiFillEdit } from "react-icons/ai";
 import ImageModal from "./modals/ImageModal";

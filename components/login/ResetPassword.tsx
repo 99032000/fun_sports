@@ -38,7 +38,7 @@ const ResetPassword = () => {
       return;
     }
     setLoading(true);
-    const { data, error } = await auth.updateUser({
+    const { error } = await auth.updateUser({
       password: passwordRef.current!.value,
     });
     setLoading(false);
@@ -83,6 +83,7 @@ const ResetPassword = () => {
             className="btn btn-primary btn-block md:text-lg text-sm text-white"
             onClick={handleResetPassword}
           >
+            {loading && <span className="loading loading-spinner"></span>}
             Reset
           </button>
         </div>

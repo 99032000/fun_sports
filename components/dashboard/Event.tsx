@@ -1,8 +1,5 @@
 "use client";
 import type { organization, social_event, sports_type } from "@prisma/client";
-import { useState } from "react";
-import toast from "react-hot-toast";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import OrganizationCard from "./OrganizationCard";
 import EventCard from "./EventCard";
