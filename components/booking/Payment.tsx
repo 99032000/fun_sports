@@ -103,7 +103,6 @@ function Payment({ socialBooking }: { socialBooking: social_booking }) {
           className="btn btn-secondary text-white"
           onClick={handlePayLaterOnClick}
         >
-          {loading && <span className="loading loading-spinner"></span>}
           Pay later
         </button>
       </div>

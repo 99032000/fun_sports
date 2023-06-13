@@ -182,6 +182,7 @@ const EventCard = ({
       {event.images_url.length > 0 && (
         <div className="flex gap-4 flex-wrap">{imageList()}</div>
       )}
+      <button className="btn btn-primary">View bookings</button>
     </div>
   );
 };
