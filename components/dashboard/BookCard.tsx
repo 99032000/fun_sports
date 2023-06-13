@@ -2,11 +2,9 @@
 "use client";
 
 import type { social_booking } from "@prisma/client";
-import { useRouter } from "next/navigation";
-import { useMemo, useState } from "react";
-import toast from "react-hot-toast";
+import { useMemo } from "react";
 import { AiFillDelete } from "react-icons/ai";
-import { bookingInfo, deleteBooking } from "@/lib/api";
+import { bookingInfo } from "@/lib/api";
 import SocialBookingTable from "../common/SocialBookingTable";
 import BookingCardModal from "./modals/BookingCardModal";
 const BookCard = ({
@@ -20,7 +18,6 @@ const BookCard = ({
 }) => {
   const bookingInfo = socialBooking.booking_info as bookingInfo[];
 
-  const router = useRouter();
   const totalPrice = useMemo(() => {
     let price = 0;
     bookingInfo.forEach((item) => {
