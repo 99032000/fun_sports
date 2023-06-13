@@ -65,7 +65,7 @@ const Login = ({ redirectUrl }: { redirectUrl: string | undefined }) => {
       toast.error(result.error.message);
       return;
     }
-    toast.success("Email sent");
+    toast.success("Email has sent, please check your email");
   };
   return (
     <div className="relative flex flex-col justify-center h-screen overflow-hidden bg-transparent p-4">
@@ -106,15 +106,15 @@ const Login = ({ redirectUrl }: { redirectUrl: string | undefined }) => {
             />
           </div>
           <button
-            className=" text-sm hover:text-secondary btn btn-link p-0"
+            className=" text-sm hover:text-secondary btn btn-link p-0 text-gray-800"
             onClick={handleForgotPasswordClick}
           >
             Forget Password?
           </button>
-          <div className=" mt-8">
+          <div className="">
             <button
               className={
-                "btn btn-primary my-8 shadow btn-block" +
+                "btn btn-primary my-4 shadow btn-block" +
                 (loading ? " btn-disabled" : "")
               }
               onClick={handleSignIn}
@@ -123,9 +123,7 @@ const Login = ({ redirectUrl }: { redirectUrl: string | undefined }) => {
               Login
             </button>
             <Link href="signup">
-              <button className="btn btn-secondary btn-block mt-4">
-                Sign Up
-              </button>
+              <button className="btn btn-secondary btn-block">Sign Up</button>
             </Link>
           </div>
         </div>

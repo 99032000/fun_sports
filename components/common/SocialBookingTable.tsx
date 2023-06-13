@@ -29,9 +29,8 @@ function SocialBookingTable({
           })}
         </tbody>
       </table>
-      <div className="divider"></div>
-      <div className=" float-right">
-        <h2>Total :${totalPrice}</h2>
+      <div>
+        <h2 className=" float-right">Total :${totalPrice}</h2>
       </div>
     </>
   );

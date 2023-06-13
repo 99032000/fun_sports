@@ -1,6 +1,6 @@
 import { toLocalTimeString } from "@/utility/Date";
 import type { social_event } from "@prisma/client";
-import ImageModal from "../dashboard/ImageModal";
+import ImageModal from "../dashboard/modals/ImageModal";
 import Image from "next/image";
 function EventInfo({ event }: { event: social_event }) {
   const imageList = () =>

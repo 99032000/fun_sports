@@ -7,6 +7,7 @@ import { AiFillDelete } from "react-icons/ai";
 import { bookingInfo } from "@/lib/api";
 import SocialBookingTable from "../common/SocialBookingTable";
 import BookingCardModal from "./modals/BookingCardModal";
+import PaymentModal from "./modals/PaymentModal";
 const BookCard = ({
   socialBooking,
 }: {
@@ -25,9 +26,16 @@ const BookCard = ({
     });
     return price;
   }, [bookingInfo]);
+  const payButtonOnClick = () => {
+    const element = document.getElementById(
+      `paymentModal${socialBooking.id}`
+    ) as any;
+    element.showModal();
+  };
   return (
     <div className="card bg-base-100 max-w-md shadow-xl p-4 flex flex-col gap-4 w-full sm:min-w-[350px]">
       <BookingCardModal id={socialBooking.id} />
+      <PaymentModal socialBooking={socialBooking} />
       <div className="flex justify-between">
         <div className="flex gap-1 items-center">
           <h1>{socialBooking.social_event.name}</h1>
@@ -48,7 +56,14 @@ const BookCard = ({
         )}
       </div>
       <SocialBookingTable bookingInfo={bookingInfo} totalPrice={totalPrice} />
-      <button className={"btn btn-primary text-white "}>Pay</button>
+      {!socialBooking.is_Paid && (
+        <button
+          className={"btn btn-primary text-white "}
+          onClick={payButtonOnClick}
+        >
+          Pay
+        </button>
+      )}
     </div>
   );
 };

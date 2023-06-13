@@ -49,9 +49,9 @@ const ResetPassword = () => {
     router.push("/");
   };
   return (
-    <div className="relative flex flex-col justify-center h-screen overflow-hidden bg-primary p-4">
+    <div className="relative flex flex-col justify-center h-[85vh] overflow-hidden p-4">
       <div className="w-full p-6 m-auto bg-white rounded-md shadow-md lg:max-w-lg">
-        <h1 className="text-3xl font-semibold text-center text-primary">
+        <h1 className="md:text-3xl text-xl font-semibold text-center text-primary">
           Reset password
         </h1>
         <form className="space-y-4">
@@ -62,7 +62,7 @@ const ResetPassword = () => {
             <input
               type="text"
               placeholder="Password"
-              className="w-full input input-bordered input-primary"
+              className="w-full input input-bordered input-primary  sm:input-lg input-sm"
               ref={passwordRef}
             />
           </div>
@@ -73,14 +73,14 @@ const ResetPassword = () => {
             <input
               type="password"
               placeholder="Confirm Password"
-              className="w-full input input-bordered input-primary"
+              className="w-full input input-bordered input-primary sm:input-lg input-sm"
               ref={passwordConfirmRef}
             />
           </div>
         </form>
         <div className=" mt-8">
           <button
-            className="btn btn-primary btn-block text-lg"
+            className="btn btn-primary btn-block md:text-lg text-sm text-white"
             onClick={handleResetPassword}
           >
             Reset

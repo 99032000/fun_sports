@@ -5,7 +5,7 @@ import {
   socialBookUpdate,
 } from "@/lib/api";
 import { social_booking } from "@prisma/client";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { useMemo, useState } from "react";
 import toast from "react-hot-toast";
 import ImageUpload from "./ImageUpload";
@@ -15,6 +15,7 @@ import SocialBookingTable from "../common/SocialBookingTable";
 function Payment({ socialBooking }: { socialBooking: social_booking }) {
   const [supabase] = useState(() => createBrowserSupabaseClient());
   const router = useRouter();
+  const pathName = usePathname();
   const bookingInfo = socialBooking.booking_info as bookingInfo[];
   const [images, setImages] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
@@ -27,12 +28,15 @@ function Payment({ socialBooking }: { socialBooking: social_booking }) {
   }, [bookingInfo]);
 
   const handlePayLaterOnClick = () => {
+    if (loading) return;
     setLoading(true);
     router.back();
     setLoading(false);
   };
 
-  const handlePayNowOnClick = async () => {
+  const handlePayNowOnClick = async (e: any) => {
+    e.preventDefault();
+    if (loading) return;
     if (images.length > 3) {
       toast.error("images can not exceed than 3");
       return;
@@ -68,7 +72,13 @@ function Payment({ socialBooking }: { socialBooking: social_booking }) {
 
     if (result.success) {
       toast.success("payment updated successfully!");
-      router.back();
+      if (pathName === "/dashboard/booking") {
+        router.refresh();
+        const element = document.getElementById(
+          `paymentModal${socialBooking.id}`
+        ) as any;
+        element.close();
+      } else router.back();
     } else {
       toast.error(result.error);
     }
@@ -82,11 +92,17 @@ function Payment({ socialBooking }: { socialBooking: social_booking }) {
 
       <ImageUpload images={images} setImages={setImages} />
       <div className="flex gap-4 mt-8 justify-end">
-        <button className="btn btn-primary" onClick={handlePayNowOnClick}>
+        <button
+          className="btn btn-primary text-white"
+          onClick={handlePayNowOnClick}
+        >
           {loading && <span className="loading loading-spinner"></span>}
           Pay now
         </button>
-        <button className="btn btn-secondary" onClick={handlePayLaterOnClick}>
+        <button
+          className="btn btn-secondary text-white"
+          onClick={handlePayLaterOnClick}
+        >
           {loading && <span className="loading loading-spinner"></span>}
           Pay later
         </button>

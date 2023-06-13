@@ -49,7 +49,6 @@ function ChooseGroup({
     if (bookingInfo.length === 0) return;
     setLoading(true);
     const result = await bookEvent(bookingInfo, eventId);
-    console.log(result);
     if (result.success) {
       setLoading(false);
       toast.success("Book was successfully 🥹");
@@ -99,9 +98,7 @@ function ChooseGroup({
       </table>
       <div className="flex sm:justify-end justify-start">
         <button
-          className={
-            "btn btn-primary my-8 shadow " + (loading ? " btn-disabled" : "")
-          }
+          className={"btn btn-primary my-8 shadow text-white"}
           onClick={bookOnClick}
         >
           {loading && <span className="loading loading-spinner"></span>}
