@@ -17,11 +17,11 @@ model user {
   wechatId          String?
   created_at        DateTime         @default(now())
   updated_at        DateTime         @default(now()) @updatedAt
+  max_orgianization Int              @default(1)
+  hobby             hobby[]
   Organization      organization[]
   Social_booking    social_booking[]
   Social_events     social_event[]
-  hobby             hobby[]
-  max_orgianization Int              @default(1)
 }
 
 model organization {
@@ -31,12 +31,12 @@ model organization {
   phone         String?
   userId        String         @db.Uuid
   sports_typeId Int
-  sports_type   sports_type    @relation(fields: [sports_typeId], references: [id])
-  owner         user           @relation(fields: [userId], references: [id])
   is_verified   Boolean        @default(false)
-  social_event  social_event[]
   description   String         @default("")
   avatar_url    String?
+  sports_type   sports_type    @relation(fields: [sports_typeId], references: [id])
+  owner         user           @relation(fields: [userId], references: [id])
+  social_event  social_event[]
 }
 
 model social_event {
@@ -51,30 +51,30 @@ model social_event {
   updated_at     DateTime         @default(now()) @updatedAt
   sports_level   String?
   sports_typeId  Int
-  Social_booking social_booking[]
-  owner          user             @relation(fields: [ownerId], references: [id])
-  sports_type    sports_type      @relation(fields: [sports_typeId], references: [id])
-  organization   organization?    @relation(fields: [organizationId], references: [id])
-  organizationId Int?
   is_template    Boolean          @default(false)
+  organizationId Int?
   fee            Float?           @default(0)
   description    String?
   images_url     String[]         @default([])
   is_private     Boolean          @default(false)
+  Social_booking social_booking[]
+  organization   organization?    @relation(fields: [organizationId], references: [id])
+  owner          user             @relation(fields: [ownerId], references: [id])
+  sports_type    sports_type      @relation(fields: [sports_typeId], references: [id])
 }
 
 model social_booking {
   id                Int          @id @default(autoincrement())
   created_at        DateTime     @default(now())
   updated_at        DateTime     @default(now()) @updatedAt
-  social_eventsId   Int
+  social_eventId    Int
   userId            String       @db.Uuid
   booking_info      Json
-  social_events     social_event @relation(fields: [social_eventsId], references: [id])
-  user              user         @relation(fields: [userId], references: [id])
   is_Paid           Boolean      @default(false)
   paidAmount        Float?
   payment_image_url String[]     @default([])
+  social_event      social_event @relation(fields: [social_eventId], references: [id], onUpdate: NoAction)
+  user              user         @relation(fields: [userId], references: [id], onUpdate: NoAction)
 }
 
 model payments {
@@ -88,18 +88,18 @@ model sports_type {
   name         String         @unique
   created_at   DateTime       @default(now())
   updated_at   DateTime       @default(now()) @updatedAt
+  hobby        hobby[]
   organization organization[]
   social_event social_event[]
-  hobby        hobby[]
 }
 
 model hobby {
   id            Int         @id @default(autoincrement())
-  sports_type   sports_type @relation(fields: [sports_typeId], references: [id])
   sports_typeId Int
-  user          user        @relation(fields: [userId], references: [id])
   userId        String      @db.Uuid
   level         Int         @default(0)
+  sports_type   sports_type @relation(fields: [sports_typeId], references: [id])
+  user          user        @relation(fields: [userId], references: [id])
 
   @@unique([sports_typeId, userId])
 }

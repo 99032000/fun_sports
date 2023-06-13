@@ -34,11 +34,15 @@ export async function DELETE(req: NextRequest, {
       data: result,
       error: null,
     }), { status: 200 });
-  } catch (error: any) {
-    return new Response(JSON.stringify(JSON.stringify({
+  } catch (e) {
+    let error = { message: "unknown error" };
+    if (e instanceof Error) {
+      error.message = e.message;
+    }
+    return new Response(JSON.stringify({
       success: false,
       data: null,
-      error,
-    })), { status: 400 });
+      error: error.message
+    }), { status: 400 });
   }
 }

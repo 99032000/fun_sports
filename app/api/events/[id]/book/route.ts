@@ -48,7 +48,7 @@ export async function POST(req: NextRequest, {
     });
     const createBooking = await prisma.social_booking.create({
       data: {
-        social_eventsId: id,
+        social_eventId: id,
         userId,
         booking_info: body
       }

@@ -59,7 +59,7 @@ type Peek<T> = {
 type TypeOmit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 
 type filteredSocialBooking = TypeOmit<social_booking,
-  'social_eventsId' | 'userId' | "booking_info" | "created_at"
+  'social_eventId' | 'userId' | "booking_info" | "created_at"
   | "updated_at">;
 
 export type PeekFilteredSocialBooking = Peek<filteredSocialBooking>;
@@ -141,6 +141,13 @@ export const socialBookUpdate = async (body: PeekFilteredSocialBooking) => {
   const response = await fetch(`/api/social_booking`, {
     method: "POST",
     body: JSON.stringify(body),
+  });
+  return await response.json();
+}
+
+export const deleteBooking = async (id: number) => {
+  const response = await fetch(`/api/social_booking/${id}`, {
+    method: "DELETE",
   });
   return await response.json();
 }

@@ -10,6 +10,7 @@ import { useMemo, useState } from "react";
 import toast from "react-hot-toast";
 import ImageUpload from "./ImageUpload";
 import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
+import SocialBookingTable from "../common/SocialBookingTable";
 
 function Payment({ socialBooking }: { socialBooking: social_booking }) {
   const [supabase] = useState(() => createBrowserSupabaseClient());
@@ -76,31 +77,7 @@ function Payment({ socialBooking }: { socialBooking: social_booking }) {
   return (
     <div>
       <h1>Summary</h1>
-      <table className="table table-xs sm:table-md">
-        {/* head */}
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Amount</th>
-            <th>Price</th>
-          </tr>
-        </thead>
-        <tbody>
-          {bookingInfo.map((item, index) => {
-            return (
-              <tr key={index}>
-                <td>{item.name}</td>
-                <td>{item.bookAmount}</td>
-                <td>{item.price}</td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
-      <div className="divider"></div>
-      <div className=" float-right">
-        <h2>Total :${totalPrice}</h2>
-      </div>
+      <SocialBookingTable bookingInfo={bookingInfo} totalPrice={totalPrice} />
       <h1>Payment</h1>
 
       <ImageUpload images={images} setImages={setImages} />
