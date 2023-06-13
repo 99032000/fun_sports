@@ -1,16 +1,15 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
-import { deleteEvent, event_group } from "@/lib/api";
+import { event_group } from "@/lib/api";
 import type { social_event, sports_type } from "@prisma/client";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import toast from "react-hot-toast";
 import { AiFillDelete, AiFillEdit } from "react-icons/ai";
 import ImageModal from "./modals/ImageModal";
 import { toLocalTimeString } from "@/utility/Date";
+import EventCardTable from "./forms/EventCardTable";
+import EventCardModal from "./modals/EventCardModal";
 
 const EventCard = ({
   event,
@@ -19,92 +18,14 @@ const EventCard = ({
   event: social_event;
   sports_types: sports_type[];
 }) => {
-  const [loading, setLoading] = useState(false);
-  const router = useRouter();
   const getSportsTypeName = (id: number) => {
     return sports_types.find((type) => type.id === id)?.name;
-  };
-  const handleDeleteOnClick = async (e: { preventDefault: () => void }) => {
-    e.preventDefault();
-    setLoading(true);
-    const result = await deleteEvent(event.id);
-    if (result.success) {
-      router.refresh();
-    } else {
-      toast.error("fail to delete event.");
-    }
-    document.getElementById(`${event.id}+"event_card"`)?.click();
-    setLoading(false);
-  };
-  const handleCloseOnClick = (e: { preventDefault: () => void }) => {
-    e.preventDefault();
-    document.getElementById(`${event.id}+"event_card"`)?.click();
   };
 
   const groupDetails = (list: event_group[]) => (
     <div className="overflow-x-auto">
-      <table className="table w-full table-compact">
-        {/* head */}
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Amount</th>
-            <th>Booked Amount</th>
-            <th>Price</th>
-          </tr>
-        </thead>
-        <tbody>
-          {list.map((item, index) => {
-            return (
-              <tr key={index}>
-                <td>{item.name}</td>
-                <td>{item.amount}</td>
-                <td>{item.booking_amount}</td>
-                <td>{item.price}</td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+      <EventCardTable list={list} />
     </div>
-  );
-
-  const modalElement = () => (
-    <>
-      <input
-        type="checkbox"
-        id={`${event.id}+"event_card"`}
-        className="modal-toggle"
-      />
-      <div className="modal">
-        <div className="modal-box">
-          <h3 className="font-bold text-lg">
-            Are you sure you want to delete ?
-          </h3>
-          <div className="modal-action">
-            <div className="flex gap-4 mt-8">
-              <button
-                className={
-                  "btn sm:btn-sm md:btn-md btn-primary w-28 text-white "
-                }
-                onClick={handleCloseOnClick}
-              >
-                No
-              </button>
-              <button
-                className={
-                  "btn sm:btn-sm md:btn-md btn-secondary w-28 text-white " +
-                  (loading && " loading")
-                }
-                onClick={handleDeleteOnClick}
-              >
-                Yes
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </>
   );
 
   const imageList = () =>
@@ -122,10 +43,13 @@ const EventCard = ({
         </label>
       </div>
     ));
-
+  const deleteButtonOnClick = () => {
+    const element = document.getElementById(`${event.id}+"event_card"`) as any;
+    element.showModal();
+  };
   return (
     <div className="card bg-base-100 max-w-md shadow-xl p-4 flex flex-col gap-4 w-full sm:min-w-[350px]">
-      {modalElement()}
+      <EventCardModal id={event.id} />
       {}
       <div className="flex justify-between">
         <div className="flex gap-2">
@@ -143,9 +67,10 @@ const EventCard = ({
             </Link>
           </div>
           <div className="tooltip tooltip-secondary" data-tip="Delete">
-            <label htmlFor={`${event.id}+"event_card"`}>
-              <AiFillDelete className=" text-secondary text-2xl cursor-pointer" />
-            </label>
+            <AiFillDelete
+              className=" text-secondary text-2xl cursor-pointer"
+              onClick={deleteButtonOnClick}
+            />
           </div>
         </div>
       </div>
