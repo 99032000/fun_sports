@@ -93,14 +93,14 @@ function Payment({ socialBooking }: { socialBooking: social_booking }) {
       <ImageUpload images={images} setImages={setImages} />
       <div className="flex gap-4 mt-8 justify-end">
         <button
-          className="btn btn-primary text-white"
+          className="btn btn-primary text-white btn-sm md:btn-md"
           onClick={handlePayNowOnClick}
         >
           {loading && <span className="loading loading-spinner"></span>}
           Pay now
         </button>
         <button
-          className="btn btn-secondary text-white"
+          className="btn btn-secondary text-white btn-sm md:btn-md"
           onClick={handlePayLaterOnClick}
         >
           Pay later

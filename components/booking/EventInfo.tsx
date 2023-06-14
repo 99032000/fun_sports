@@ -1,8 +1,20 @@
 import { toLocalTimeString } from "@/utility/Date";
-import type { social_event } from "@prisma/client";
+import type { social_booking, social_event } from "@prisma/client";
 import ImageModal from "../dashboard/modals/ImageModal";
 import Image from "next/image";
-function EventInfo({ event }: { event: social_event }) {
+import { bookingInfo } from "@/lib/api";
+import SocialBookingsTable from "./SocialBookingsTable";
+function EventInfo({
+  event,
+  socialBookings,
+}: {
+  event: social_event;
+  socialBookings: (social_booking & {
+    user: {
+      name: string;
+    };
+  })[];
+}) {
   const imageList = () =>
     event.images_url.map((url, index) => (
       <div key={index}>
@@ -49,6 +61,9 @@ function EventInfo({ event }: { event: social_event }) {
         {event.images_url.length > 0 && (
           <div className="flex gap-4 flex-wrap">{imageList()}</div>
         )}
+      </div>
+      <div className=" md:mt-4 mt-2">
+        <SocialBookingsTable socialBookings={socialBookings} />
       </div>
     </>
   );

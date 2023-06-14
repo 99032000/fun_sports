@@ -9,5 +9,19 @@ export default async function Page({ params }: { params: { id: string } }) {
     where: { id: parseInt(params.id) },
   });
   if (!event) return <NotFound />;
-  return <Booking userId={userId} event={event} />;
+  const socialBookings = await prisma.social_booking.findMany({
+    where: {
+      social_eventId: parseInt(params.id),
+    },
+    include: {
+      user: {
+        select: {
+          name: true,
+        },
+      },
+    },
+  });
+  return (
+    <Booking userId={userId} event={event} socialBookings={socialBookings} />
+  );
 }

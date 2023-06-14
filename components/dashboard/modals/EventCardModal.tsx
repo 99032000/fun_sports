@@ -16,7 +16,7 @@ function EventCardModal({ id }: { id: number }) {
       toast.error("fail to delete event.");
     }
     const element = document.getElementById(`${id}+"event_card"`) as any;
-    element.showModal();
+    element.close();
     setLoading(false);
   };
 

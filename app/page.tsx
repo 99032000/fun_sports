@@ -22,7 +22,7 @@ export default async function Page() {
     },
     where: {
       date: {
-        gte: new Date(),
+        gte: new Date(Date.now()),
       },
     },
   });
