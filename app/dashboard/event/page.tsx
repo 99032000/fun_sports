@@ -17,6 +17,17 @@ const Page = async () => {
     orderBy: {
       date: "desc",
     },
+    include: {
+      Social_booking: {
+        include: {
+          user: {
+            select: {
+              name: true,
+            },
+          },
+        },
+      },
+    },
   });
   const sports_types_promise = getSportsType();
   const [events, organizations, sports_types] = await Promise.all([

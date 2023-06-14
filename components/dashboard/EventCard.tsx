@@ -2,7 +2,7 @@
 "use client";
 
 import { event_group } from "@/lib/api";
-import type { social_event, sports_type } from "@prisma/client";
+import type { social_booking, social_event, sports_type } from "@prisma/client";
 import Image from "next/image";
 import Link from "next/link";
 import { AiFillDelete, AiFillEdit } from "react-icons/ai";
@@ -10,12 +10,19 @@ import ImageModal from "./modals/ImageModal";
 import { toLocalTimeString } from "@/utility/Date";
 import EventCardTable from "./forms/EventCardTable";
 import EventCardModal from "./modals/EventCardModal";
+import EventCardViewBookModal from "./modals/EventCardViewBookModal";
 
 const EventCard = ({
   event,
   sports_types,
 }: {
-  event: social_event;
+  event: social_event & {
+    Social_booking: (social_booking & {
+      user: {
+        name: string;
+      };
+    })[];
+  };
   sports_types: sports_type[];
 }) => {
   const getSportsTypeName = (id: number) => {
@@ -47,9 +54,17 @@ const EventCard = ({
     const element = document.getElementById(`${event.id}+"event_card"`) as any;
     element.showModal();
   };
+  const viewButtonOnClick = () => {
+    const element = document.getElementById(`${event.id}viewBook`) as any;
+    element.showModal();
+  };
   return (
     <div className="card bg-base-100 max-w-md shadow-xl p-4 flex flex-col gap-4 w-full sm:min-w-[350px]">
       <EventCardModal id={event.id} />
+      <EventCardViewBookModal
+        eventId={event.id}
+        socialBookings={event.Social_booking}
+      />
       {}
       <div className="flex justify-between">
         <div className="flex gap-2">
@@ -107,7 +122,9 @@ const EventCard = ({
       {event.images_url.length > 0 && (
         <div className="flex gap-4 flex-wrap">{imageList()}</div>
       )}
-      <button className="btn btn-primary">View bookings</button>
+      <button className="btn btn-primary" onClick={viewButtonOnClick}>
+        View bookings
+      </button>
     </div>
   );
 };

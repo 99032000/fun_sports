@@ -18,11 +18,11 @@ const NavBar = ({
   const { supabase } = useSupabase();
   const router = useRouter();
   const pathName = usePathname();
-  const dropdownRef = useRef<HTMLDivElement>(null);
   const titleList = [
     { name: "Home", href: "/" },
     { name: "My Event", href: "/dashboard/event" },
     { name: "My Booking", href: "/dashboard/booking" },
+    { name: "Contact me", href: "/contact-me" },
   ];
   const dashboardTitleList = [
     { name: "Home", href: "/" },

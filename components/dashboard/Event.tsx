@@ -1,11 +1,22 @@
 "use client";
-import type { organization, social_event, sports_type } from "@prisma/client";
+import type {
+  organization,
+  social_booking,
+  social_event,
+  sports_type,
+} from "@prisma/client";
 import Link from "next/link";
 import OrganizationCard from "./OrganizationCard";
 import EventCard from "./EventCard";
 
 type Props = {
-  events: social_event[];
+  events: (social_event & {
+    Social_booking: (social_booking & {
+      user: {
+        name: string;
+      };
+    })[];
+  })[];
   organizations: organization[];
   sports_types: sports_type[];
 };
