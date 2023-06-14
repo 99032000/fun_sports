@@ -144,7 +144,7 @@ const Profile = ({
           <div className="flex justify-between">
             <h1 className=" text-xl">User detail</h1>
             <Link href={"/login/reset-password"}>
-              <button className="btn btn-accent text-white text-xs sm:text-sm btn-xs sm:btn-sm md:btn-md">
+              <button className="btn btn-accent text-white text-sm btn-xs sm:btn-sm md:btn-md">
                 reset password
               </button>
             </Link>
@@ -184,7 +184,7 @@ const Profile = ({
         <div className="flex justify-between mt-16">
           <button
             className={
-              "btn btn-xs sm:btn-sm md:btn-md btn-primary w-28 text-white " +
+              "btn btn-sm md:btn-md btn-primary w-28 text-white " +
               (loading && " loading")
             }
             onClick={handleSaveOnClick}
