@@ -21,11 +21,11 @@ const NavBar = ({
   const dropdownRef = useRef<HTMLDivElement>(null);
   const titleList = [
     { name: "Home", href: "/" },
-    { name: "Coaching", href: "/coaching" },
-    { name: "Market", href: "/market" },
-    { name: "Contact me", href: "/contact-me" },
+    { name: "My Event", href: "/dashboard/event" },
+    { name: "My Booking", href: "/dashboard/booking" },
   ];
   const dashboardTitleList = [
+    { name: "Home", href: "/" },
     { name: "Profile", href: "/dashboard" },
     { name: "Event", href: "/dashboard/event" },
     { name: "Booking", href: "/dashboard/booking" },
