@@ -52,7 +52,7 @@ function UpdateEvent({ event }: { event: social_event }) {
       startDate: time.toDateString(),
       endDate: time.toDateString(),
     });
-  }, [event, time]);
+  }, []);
 
   const handleDateChange = (newValue: any) => {
     setDate(newValue);
