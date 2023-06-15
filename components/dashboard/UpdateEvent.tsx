@@ -20,8 +20,8 @@ function UpdateEvent({ event }: { event: social_event }) {
   const nextMonth = new Date();
   nextMonth.setDate(nextMonth.getDate() + 29);
   const [date, setDate] = useState<{
-    startDate: Date | null;
-    endDate: Date | null;
+    startDate: string | null;
+    endDate: string | null;
   }>({
     startDate: null,
     endDate: null,
@@ -49,8 +49,8 @@ function UpdateEvent({ event }: { event: social_event }) {
     setGroup(event.booking_groups! as event_group[]);
     setImages(event.images_url);
     setDate({
-      startDate: time,
-      endDate: time,
+      startDate: time.toDateString(),
+      endDate: time.toDateString(),
     });
   }, [event, time]);
 
@@ -131,9 +131,7 @@ function UpdateEvent({ event }: { event: social_event }) {
     }
     // update event start
     setLoading(true);
-    const timeStamp = new Date(
-      `${date.startDate.toDateString()} ${hours}:${mins}`
-    );
+    const timeStamp = new Date(`${date.startDate} ${hours}:${mins}`);
     const body: upsertEventBody = {
       id: event.id,
       name,
@@ -362,12 +360,10 @@ function UpdateEvent({ event }: { event: social_event }) {
 
         <div className="flex sm:justify-end justify-start">
           <button
-            className={
-              "btn btn-primary mt-8 shadow" +
-              (loading ? " disabled loading" : "")
-            }
+            className={"btn btn-primary mt-8 shadow"}
             onClick={handleUpadteButtonOnClick}
           >
+            {loading && <span className="loading loading-spinner"></span>}
             Update
           </button>
         </div>
