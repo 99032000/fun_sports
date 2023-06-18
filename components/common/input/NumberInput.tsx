@@ -1,11 +1,16 @@
-import { InputHTMLAttributes } from "react";
-import { useController, Control } from "react-hook-form";
+import React, { InputHTMLAttributes } from "react";
+import { useController } from "react-hook-form";
 
-type TextInputProps = {
+type NumberInputProps = {
   required?: boolean;
   label: string;
 } & InputHTMLAttributes<HTMLInputElement>;
-export function TextInput({ required, name, label, ...props }: TextInputProps) {
+export function NumberInput({
+  required,
+  name,
+  label,
+  ...props
+}: NumberInputProps) {
   const _label = `${label}:${required ? "*" : ""}`;
 
   return (
@@ -15,22 +20,24 @@ export function TextInput({ required, name, label, ...props }: TextInputProps) {
       </label>
       <input
         id={name}
+        type="number"
         className="input input-bordered w-full input-sm max-w-sm input-primary"
+        min="0"
         {...props}
       />
     </div>
   );
 }
 
-type ControlledTextInputProps = {
+type ControlledNumberInputProps = {
   name: string;
-  control: Control<any>;
-} & TextInputProps;
-export function ControlledTextInput({
+  control: any;
+} & NumberInputProps;
+export function ControlledNumberInput({
   name,
   control,
   ...props
-}: ControlledTextInputProps) {
+}: ControlledNumberInputProps) {
   const {
     field: { ref, ...field },
   } = useController({
@@ -38,5 +45,5 @@ export function ControlledTextInput({
     control,
   });
 
-  return <TextInput {...field} {...props} />;
+  return <NumberInput {...field} {...props} />;
 }

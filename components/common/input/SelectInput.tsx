@@ -30,7 +30,6 @@ export function SelectInput({
       <select
         id={name}
         className="select max-w-fit w-full sm:max-w-[300px] md:max-w-[350px] select-primary select-sm text-xs sm:text-sm"
-        defaultValue={-1}
         {...props}
       >
         {_options.map(({ id, name }) => (
@@ -52,7 +51,9 @@ export function ControlledSelectInput({
   control,
   ...props
 }: ControlledSelectInputProps) {
-  const { field } = useController({
+  const {
+    field: { ref, ...field },
+  } = useController({
     name,
     control,
   });

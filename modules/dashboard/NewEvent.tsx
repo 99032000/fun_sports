@@ -8,9 +8,14 @@ import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { usePathname, useRouter } from "next/navigation";
 import { ChangeEvent, useRef, useState } from "react";
 import { toast } from "react-hot-toast";
-import Datepicker from "react-tailwindcss-datepicker";
 import EventGroupDetails from "../../components/dashboard/EventGroupDetails";
 import BreadCrumb from "@/components/common/BreadCrumb";
+import { ControlledTextInput } from "@/components/common/input/TextInput";
+import { useForm } from "react-hook-form";
+import { ControlledSelectInput } from "@/components/common/input/SelectInput";
+import { ControlledNumberInput } from "@/components/common/input/NumberInput";
+import { ControlledDateInput } from "@/components/common/input/DateInput";
+import { addDays } from "date-fns";
 
 type props = {
   userId: string;
@@ -188,55 +193,55 @@ function NewEvent({ userId, organizations, sports_types }: props) {
     setLoading(false);
   };
 
+  const today = new Date();
+
+  const eventDateRange = addDays(today, 28);
+
+  const { handleSubmit, control } = useForm({
+    defaultValues: {
+      organisation: -1,
+      name: "",
+      sport_type: -1,
+      data: today,
+      address: "",
+      venue: "",
+      fee: 0,
+    },
+  });
+
+  const onSubmit = handleSubmit(console.log);
+
   const eventInfo = () => (
     <>
-      <div className="grid grid-cols-1 grid-flow-row-dense auto-cols-max gap-4 lg:grid-cols-2">
+      <form
+        onSubmit={onSubmit}
+        className="grid grid-cols-1 grid-flow-row-dense auto-cols-max gap-4 lg:grid-cols-2"
+      >
         {organizations.length > 0 && (
-          <div className="flex flex-row gap-4 mt-8 flex-wrap">
-            <h2 className=" my-auto text-sm sm:text-lg">Organization:*</h2>
-            <select
-              className="select max-w-max sm:max-w-[300px] md:max-w-[350px] select-primary select-sm text-xs sm:text-sm"
-              defaultValue={-1}
-              ref={orgRef}
-              onChange={handleOrganizationSelectOnChange}
-            >
-              <option disabled value={-1}>
-                Choose a organization
-              </option>
-              {organizations.map((org) => (
-                <option key={org.id} value={org.id}>
-                  {org.name}
-                </option>
-              ))}
-            </select>
-          </div>
+          <ControlledSelectInput
+            name="organisation"
+            control={control}
+            label="Organisation"
+            placeholder="Choose an organisation"
+            options={organizations}
+          />
         )}
-        <div className="flex flex-row gap-4 md:mt-8 mt-4">
-          <h2 className=" my-auto text-sm sm:text-lg">Name:*</h2>
-          <input
-            type="address"
-            className="input input-bordered w-full input-sm max-w-sm input-primary"
-            ref={nameRef}
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-        </div>
 
-        <div className="flex flex-row gap-4 md:mt-8 mt-4 flex-wrap">
-          <h2 className=" my-auto text-sm sm:text-lg ">Date:*</h2>
-          <Datepicker
-            value={date}
-            onChange={handleDateChange}
-            asSingle={true}
-            useRange={false}
-            displayFormat={"DD/MM/YYYY"}
-            inputClassName="select w-full max-w-fit sm:max-w-[300px] md:max-w-[350px] select-primary select-sm"
-            toggleClassName=" hidden"
-            containerClassName="relative"
-            minDate={yesterday}
-            maxDate={nextMonth}
-          />
-        </div>
+        <ControlledTextInput
+          label="Name"
+          name="name"
+          control={control}
+          required
+        />
+
+        <ControlledDateInput
+          name="date"
+          control={control}
+          label="Date"
+          min={today}
+          max={eventDateRange}
+          required
+        />
         <div className="flex flex-row gap-4 md:mt-8 mt-4 flex-wrap">
           <h2 className=" my-auto text-sm sm:text-lg ">Time:*</h2>
           <div className="flex gap-4 flex-wrap">
@@ -270,48 +275,34 @@ function NewEvent({ userId, organizations, sports_types }: props) {
             </select>
           </div>
         </div>
-        <div className="flex flex-row gap-4 md:mt-8 mt-4 flex-wrap">
-          <h2 className=" my-auto text-sm sm:text-lg">Sports_type:*</h2>
-          <select
-            className="select w-full max-w-fit sm:max-w-[300px] md:max-w-[350px] select-primary select-sm text-xs sm:text-sm"
-            disabled={true}
-            value={sportTypeValue}
-          >
-            <option disabled value={-1}>
-              Choose a sport
-            </option>
-            {sports_types.map((sport) => (
-              <option key={sport.id} value={sport.id}>
-                {sport.name}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="flex flex-row gap-4 md:mt-8 mt-4">
-          <h2 className=" my-auto text-sm sm:text-lg">Address:*</h2>
-          <input
-            type="address"
-            className="input input-bordered w-full input-sm max-w-sm input-primary"
-            ref={addressRef}
-          />
-        </div>
-        <div className="flex flex-row gap-4 md:mt-8 mt-4">
-          <h2 className=" my-auto text-sm sm:text-lg">Venue name:</h2>
-          <input
-            type="text"
-            className="input input-bordered w-full input-sm max-w-sm input-primary"
-            ref={venueRef}
-          />
-        </div>
-        <div className="flex flex-row gap-4 md:mt-8 mt-4">
-          <h2 className=" my-auto text-sm sm:text-lg">Fee:*</h2>
-          <input
-            type="number"
-            className="input input-bordered w-full input-sm max-w-sm input-primary"
-            min="0"
-            ref={feeRef}
-          />
-        </div>
+
+        <ControlledSelectInput
+          name="sport_type"
+          control={control}
+          label="Sport Type"
+          options={sports_types}
+          required
+          disabled
+        />
+
+        <ControlledTextInput
+          name="address"
+          control={control}
+          label="Address"
+          required
+        />
+        <ControlledTextInput
+          name="venue"
+          control={control}
+          label="Venue name"
+        />
+
+        <ControlledNumberInput
+          name="fee"
+          control={control}
+          label="Fee"
+          required
+        />
         <div className="flex flex-row gap-4 mt-8 flex-wrap">
           <h2 className=" my-auto text-sm sm:text-lg">Description:*</h2>
           <textarea
@@ -320,7 +311,9 @@ function NewEvent({ userId, organizations, sports_types }: props) {
             ref={descriptionRef}
           ></textarea>
         </div>
-      </div>
+
+        <button>Submit</button>
+      </form>
       <div className="flex flex-row gap-4 mt-8 flex-wrap">
         <div className="mockup-code  bg-primary text-primary-content w-full text-xs sm:text-sm">
           <pre data-prefix=">">
