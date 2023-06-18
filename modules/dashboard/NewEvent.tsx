@@ -5,11 +5,12 @@ import { upsertEvent, upsertEventBody, event_group } from "@/lib/api";
 import { hoursList, minsList } from "@/utility/Date";
 import type { organization, sports_type } from "@prisma/client";
 import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { ChangeEvent, useRef, useState } from "react";
 import { toast } from "react-hot-toast";
 import Datepicker from "react-tailwindcss-datepicker";
 import EventGroupDetails from "../../components/dashboard/EventGroupDetails";
+import BreadCrumb from "@/components/common/BreadCrumb";
 
 type props = {
   userId: string;
@@ -361,21 +362,12 @@ function NewEvent({ userId, organizations, sports_types }: props) {
       <EventGroupDetails group={group} setGroup={setGroup} />
     </>
   );
+  const path = usePathname();
+
   return (
     <div className="">
-      <div className="text-sm md:text-lg breadcrumbs">
-        <ul>
-          <li>
-            <a>Dashboard</a>
-          </li>
-          <li>
-            <a>Event</a>
-          </li>
-          <li>
-            <a>New Event</a>
-          </li>
-        </ul>
-      </div>
+      <BreadCrumb url={path} />
+
       <div className=" mt-4 w-full p-6 m-auto bg-white rounded-md shadow-md">
         <h1 className=" text-xl">New Event</h1>
         {eventInfo()}
