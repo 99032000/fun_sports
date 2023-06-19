@@ -4,11 +4,13 @@ import { useController } from "react-hook-form";
 type NumberInputProps = {
   required?: boolean;
   label: string;
+  error?: string;
 } & InputHTMLAttributes<HTMLInputElement>;
 export function NumberInput({
   required,
   name,
   label,
+  error,
   ...props
 }: NumberInputProps) {
   const _label = `${label}:${required ? "*" : ""}`;
@@ -25,6 +27,7 @@ export function NumberInput({
         min="0"
         {...props}
       />
+      {error && <span className="text-red-700">{`Oh shit! ${error}`}</span>}
     </div>
   );
 }
@@ -40,10 +43,11 @@ export function ControlledNumberInput({
 }: ControlledNumberInputProps) {
   const {
     field: { ref, ...field },
+    fieldState: { error },
   } = useController({
     name,
     control,
   });
 
-  return <NumberInput {...field} {...props} />;
+  return <NumberInput error={error?.message} {...field} {...props} />;
 }

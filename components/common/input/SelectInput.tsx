@@ -9,6 +9,7 @@ type SelectInputProps = {
   required?: boolean;
   label: string;
   options: SelectOption[];
+  error?: string;
 } & SelectHTMLAttributes<HTMLSelectElement>;
 export function SelectInput({
   required,
@@ -16,6 +17,7 @@ export function SelectInput({
   label,
   placeholder,
   options,
+  error,
   ...props
 }: SelectInputProps) {
   const _label = `${label}:${required ? "*" : ""}`;
@@ -38,6 +40,7 @@ export function SelectInput({
           </option>
         ))}
       </select>
+      {error && <span className="text-red-700">{`Oh shit! ${error}`}</span>}
     </div>
   );
 }
@@ -53,10 +56,11 @@ export function ControlledSelectInput({
 }: ControlledSelectInputProps) {
   const {
     field: { ref, ...field },
+    fieldState: { error },
   } = useController({
     name,
     control,
   });
 
-  return <SelectInput {...field} {...props} />;
+  return <SelectInput error={error?.message} {...field} {...props} />;
 }

@@ -4,8 +4,15 @@ import { useController, Control } from "react-hook-form";
 type TextInputProps = {
   required?: boolean;
   label: string;
+  error?: string;
 } & InputHTMLAttributes<HTMLInputElement>;
-export function TextInput({ required, name, label, ...props }: TextInputProps) {
+export function TextInput({
+  required,
+  name,
+  label,
+  error,
+  ...props
+}: TextInputProps) {
   const _label = `${label}:${required ? "*" : ""}`;
 
   return (
@@ -18,6 +25,7 @@ export function TextInput({ required, name, label, ...props }: TextInputProps) {
         className="input input-bordered w-full input-sm max-w-sm input-primary"
         {...props}
       />
+      {error && <span className="text-red-700">{`Oh shit! ${error}`}</span>}
     </div>
   );
 }
@@ -33,10 +41,11 @@ export function ControlledTextInput({
 }: ControlledTextInputProps) {
   const {
     field: { ref, ...field },
+    fieldState: { error },
   } = useController({
     name,
     control,
   });
 
-  return <TextInput {...field} {...props} />;
+  return <TextInput error={error?.message} {...field} {...props} />;
 }

@@ -6,12 +6,14 @@ type DateInputProps = {
   label: string;
   min: Date;
   max: Date;
+  error?: string;
 } & Omit<InputHTMLAttributes<HTMLInputElement>, "min" | "max">;
 export function DateInput({
   required,
   label,
   min,
   max,
+  error,
   ...props
 }: DateInputProps) {
   const _label = `${label}:${required ? "*" : ""}`;
@@ -26,6 +28,7 @@ export function DateInput({
         min={min.toISOString().slice(0, 16)}
         max={max.toISOString().slice(0, 16)}
       />
+      {error && <span className="text-red-700">{`Oh shit! ${error}`}</span>}
     </div>
   );
 }
@@ -41,10 +44,11 @@ export function ControlledDateInput({
 }: ControlledDateInputProps) {
   const {
     field: { ref, ...field },
+    fieldState: { error },
   } = useController({
     name,
     control,
   });
 
-  return <DateInput {...field} {...props} />;
+  return <DateInput error={error?.message} {...field} {...props} />;
 }

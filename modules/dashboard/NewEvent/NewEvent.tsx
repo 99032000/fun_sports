@@ -6,9 +6,9 @@ import { hoursList, minsList } from "@/utility/Date";
 import type { organization, sports_type } from "@prisma/client";
 import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { usePathname, useRouter } from "next/navigation";
-import { ChangeEvent, useRef, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { toast } from "react-hot-toast";
-import EventGroupDetails from "../../components/dashboard/EventGroupDetails";
+import EventGroupDetails from "../../../components/dashboard/EventGroupDetails";
 import BreadCrumb from "@/components/common/BreadCrumb";
 import { ControlledTextInput } from "@/components/common/input/TextInput";
 import { useForm } from "react-hook-form";
@@ -16,6 +16,10 @@ import { ControlledSelectInput } from "@/components/common/input/SelectInput";
 import { ControlledNumberInput } from "@/components/common/input/NumberInput";
 import { ControlledDateInput } from "@/components/common/input/DateInput";
 import { addDays } from "date-fns";
+import { ControlledTextareaInput } from "@/components/common/input/TextareaInput";
+import { ControlledFileInput } from "@/components/common/input/FileInput";
+import { resolver } from "./NewEventForm.schema";
+import { useNewEventForm } from "./useNewEventForm.hook";
 
 type props = {
   userId: string;
@@ -197,186 +201,126 @@ function NewEvent({ userId, organizations, sports_types }: props) {
 
   const eventDateRange = addDays(today, 28);
 
-  const { handleSubmit, control } = useForm({
-    defaultValues: {
-      organisation: -1,
-      name: "",
-      sport_type: -1,
-      data: today,
-      address: "",
-      venue: "",
-      fee: 0,
-    },
-  });
-
-  const onSubmit = handleSubmit(console.log);
-
-  const eventInfo = () => (
-    <>
-      <form
-        onSubmit={onSubmit}
-        className="grid grid-cols-1 grid-flow-row-dense auto-cols-max gap-4 lg:grid-cols-2"
-      >
-        {organizations.length > 0 && (
-          <ControlledSelectInput
-            name="organisation"
-            control={control}
-            label="Organisation"
-            placeholder="Choose an organisation"
-            options={organizations}
-          />
-        )}
-
-        <ControlledTextInput
-          label="Name"
-          name="name"
-          control={control}
-          required
-        />
-
-        <ControlledDateInput
-          name="date"
-          control={control}
-          label="Date"
-          min={today}
-          max={eventDateRange}
-          required
-        />
-        <div className="flex flex-row gap-4 md:mt-8 mt-4 flex-wrap">
-          <h2 className=" my-auto text-sm sm:text-lg ">Time:*</h2>
-          <div className="flex gap-4 flex-wrap">
-            <select
-              className="select w-full max-w-fit select-primary select-sm text-xs sm:text-sm"
-              defaultValue={-1}
-              ref={hourRef}
-            >
-              <option disabled value={-1}>
-                Select hours
-              </option>
-              {hoursList.map((hour, index) => (
-                <option key={index} value={hour}>
-                  {hour}
-                </option>
-              ))}
-            </select>
-            <select
-              className="select w-full max-w-fit select-primary select-sm text-xs sm:text-sm"
-              defaultValue={-1}
-              ref={minRef}
-            >
-              <option disabled value={-1}>
-                Select mins
-              </option>
-              {minsList.map((min, index) => (
-                <option key={index} value={min}>
-                  {min}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
-
-        <ControlledSelectInput
-          name="sport_type"
-          control={control}
-          label="Sport Type"
-          options={sports_types}
-          required
-          disabled
-        />
-
-        <ControlledTextInput
-          name="address"
-          control={control}
-          label="Address"
-          required
-        />
-        <ControlledTextInput
-          name="venue"
-          control={control}
-          label="Venue name"
-        />
-
-        <ControlledNumberInput
-          name="fee"
-          control={control}
-          label="Fee"
-          required
-        />
-        <div className="flex flex-row gap-4 mt-8 flex-wrap">
-          <h2 className=" my-auto text-sm sm:text-lg">Description:*</h2>
-          <textarea
-            placeholder="Describe your organization"
-            className="textarea textarea-bordered textarea-lg w-full max-w-lg textarea-primary"
-            ref={descriptionRef}
-          ></textarea>
-        </div>
-
-        <button>Submit</button>
-      </form>
-      <div className="flex flex-row gap-4 mt-8 flex-wrap">
-        <div className="mockup-code  bg-primary text-primary-content w-full text-xs sm:text-sm">
-          <pre data-prefix=">">
-            <code>Image can not exceed 6MB.</code>
-          </pre>
-          <pre data-prefix=">">
-            <code>You can upload upto 3 images.</code>
-          </pre>
-        </div>
-        <h2 className=" my-auto text-sm sm:text-lg">Upload Event Images:</h2>
-        <input
-          type="file"
-          className="file-input file-input-bordered file-input-primary w-full max-w-xs file-input-sm md:file-input-md"
-          onChange={uploadImages}
-          accept="image/*"
-          multiple
-        />
-      </div>
-      {images.length > 0 && (
-        <div className="flex gap-6 mt-8 flex-wrap">
-          {images.map((image) => (
-            <div className="indicator" key={image.name}>
-              <span
-                className="indicator-item badge badge-secondary cursor-pointer w-10 h-8"
-                onClick={() => handleDeleteImageOnClick(image.name)}
-              >
-                X
-              </span>
-
-              <img
-                src={URL.createObjectURL(image)}
-                alt="your image"
-                className=" w-36 h-28 rounded-xl object-cover"
-              />
-            </div>
-          ))}
-        </div>
-      )}
-      <EventGroupDetails group={group} setGroup={setGroup} />
-    </>
-  );
+  const { control, onSubmit } = useNewEventForm();
   const path = usePathname();
 
   return (
     <div className="">
       <BreadCrumb url={path} />
 
-      <div className=" mt-4 w-full p-6 m-auto bg-white rounded-md shadow-md">
+      <form
+        onSubmit={onSubmit}
+        className=" mt-4 w-full p-6 m-auto bg-white rounded-md shadow-md"
+      >
         <h1 className=" text-xl">New Event</h1>
-        {eventInfo()}
+
+        <div className="grid grid-cols-1 grid-flow-row-dense auto-cols-max gap-4 lg:grid-cols-2">
+          {organizations.length > 0 && (
+            <ControlledSelectInput
+              name="organisation"
+              control={control}
+              label="Organisation"
+              placeholder="Choose an organisation"
+              options={organizations}
+            />
+          )}
+
+          <ControlledTextInput
+            name="name"
+            control={control}
+            label="Name"
+            required
+          />
+
+          <ControlledDateInput
+            name="date"
+            control={control}
+            label="Date"
+            min={today}
+            max={eventDateRange}
+            required
+          />
+
+          <ControlledSelectInput
+            name="sport_type"
+            control={control}
+            label="Sport Type"
+            options={sports_types}
+            required
+            disabled
+          />
+
+          <ControlledTextInput
+            name="address"
+            control={control}
+            label="Address"
+            required
+          />
+          <ControlledTextInput
+            name="venue"
+            control={control}
+            label="Venue name"
+          />
+
+          <ControlledNumberInput
+            name="fee"
+            control={control}
+            label="Fee"
+            required
+          />
+
+          <ControlledTextareaInput
+            name="description"
+            control={control}
+            label="Description"
+            placeholder="Describe your organization"
+            required
+          />
+        </div>
+
+        {/* Validation does not happen onChange rn, simply because I'm too lazy to set up error handling with toast. */}
+        <ControlledFileInput
+          name="images"
+          control={control}
+          label="Upload Event Image"
+          accept="image/*"
+          multiple
+        />
+
+        {images.length > 0 && (
+          <div className="flex gap-6 mt-8 flex-wrap">
+            {images.map((image) => (
+              <div className="indicator" key={image.name}>
+                <span
+                  className="indicator-item badge badge-secondary cursor-pointer w-10 h-8"
+                  onClick={() => handleDeleteImageOnClick(image.name)}
+                >
+                  X
+                </span>
+
+                <img
+                  src={URL.createObjectURL(image)}
+                  alt="your image"
+                  className=" w-36 h-28 rounded-xl object-cover"
+                />
+              </div>
+            ))}
+          </div>
+        )}
+        <EventGroupDetails group={group} setGroup={setGroup} />
 
         <div className="flex sm:justify-end justify-start">
           <button
+            type="submit"
             className={
               "btn btn-primary mt-8 shadow" +
               (loading ? " btn-disabled loading" : "")
             }
-            onClick={handleSaveButtonOnClick}
           >
             Create
           </button>
         </div>
-      </div>
+      </form>
     </div>
   );
 }
