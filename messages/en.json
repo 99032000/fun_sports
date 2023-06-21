@@ -1,0 +1,13 @@
+{
+  "navigation":{
+    "home": "Home",
+    "myEvent": "My Event",
+    "myBooking":"My Booking",
+    "contactMe":"Contact me",
+    "profile": "Profile"
+  },
+  "localeSwitcher":{
+    "label": "Change language",
+    "locale":"{locale, select, cn {中文} en {English} other {Unknown}}"
+  }
+}

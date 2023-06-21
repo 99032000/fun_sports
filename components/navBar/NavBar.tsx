@@ -1,13 +1,15 @@
 "use client";
 
 import { useSupabase } from "../providers/supabase-provider";
-import { useRef } from "react";
 import Image from "next/image";
-import Link from "next/link";
+import Link from "next-intl/link";
 import type { Session } from "@supabase/supabase-js";
 import toast from "react-hot-toast";
 import { useRouter, usePathname } from "next/navigation";
 import type { user } from "@prisma/client";
+import { useTranslations } from "next-intl";
+import LocaleSwitcher from "./LocalSwitcher";
+
 const NavBar = ({
   session,
   user,
@@ -18,17 +20,19 @@ const NavBar = ({
   const { supabase } = useSupabase();
   const router = useRouter();
   const pathName = usePathname();
+  const t = useTranslations("navigation");
+
   const titleList = [
-    { name: "Home", href: "/" },
-    { name: "My Event", href: "/dashboard/event" },
-    { name: "My Booking", href: "/dashboard/booking" },
-    { name: "Contact me", href: "/contact-me" },
+    { name: t("home"), href: "/" },
+    { name: t("myEvent"), href: "/dashboard/event" },
+    { name: t("myBooking"), href: "/dashboard/booking" },
+    { name: t("contactMe"), href: "/contact-me" },
   ];
   const dashboardTitleList = [
-    { name: "Home", href: "/" },
-    { name: "Profile", href: "/dashboard" },
-    { name: "Event", href: "/dashboard/event" },
-    { name: "Booking", href: "/dashboard/booking" },
+    { name: t("home"), href: "/" },
+    { name: t("profile"), href: "/dashboard" },
+    { name: t("myEvent"), href: "/dashboard/event" },
+    { name: t("myBooking"), href: "/dashboard/booking" },
   ];
 
   const handleSignOut = async () => {
@@ -92,6 +96,7 @@ const NavBar = ({
         <ul className="menu menu-horizontal px-1">{getTitles()}</ul>
       </div>
       <div className="navbar-end">
+        <LocaleSwitcher />
         {session ? (
           <div className="dropdown dropdown-bottom dropdown-end cursor-pointer z-50">
             <div className="avatar placeholder" tabIndex={0}>
