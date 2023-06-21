@@ -42,7 +42,7 @@ const Profile = ({
       });
       setHobbyList(filteredHobbies);
     }
-  }, [user]);
+  }, []);
 
   const sports_level = () => {
     return hobbyList.map((hobby) => {
