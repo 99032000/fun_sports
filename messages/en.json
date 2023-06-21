@@ -4,7 +4,9 @@
     "myEvent": "My Event",
     "myBooking":"My Booking",
     "contactMe":"Contact me",
-    "profile": "Profile"
+    "profile": "Profile",
+    "dashboard":"Dashboard",
+    "signout":"Sign out"
   },
   "localeSwitcher":{
     "label": "Change language",

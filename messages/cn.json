@@ -4,7 +4,9 @@
     "myEvent": "活动",
     "myBooking":"预定",
     "contactMe":"联系我",
-    "profile": "用户信息"
+    "profile": "用户信息",
+    "dashboard":"用户中心",
+    "signout":"登出"
   },
   "localeSwitcher":{
     "label": "更改语言",

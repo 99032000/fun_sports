@@ -111,13 +111,13 @@ const NavBar = ({
               className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52"
             >
               <li>
-                <Link href={"/dashboard"}>Dashboard</Link>
+                <Link href={"/dashboard"}>{t("dashboard")}</Link>
               </li>
               <li>
-                <Link href={"/dashboard/booking"}>Bookings</Link>
+                <Link href={"/dashboard/booking"}>{t("myBooking")}</Link>
               </li>
               <li>
-                <a onClick={handleSignOut}>Sign out</a>
+                <a onClick={handleSignOut}>{t("signout")}</a>
               </li>
             </ul>
           </div>
