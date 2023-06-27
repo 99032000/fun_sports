@@ -5,8 +5,8 @@ import { Toaster } from "react-hot-toast";
 import { getSession } from "@/lib/client/supabaseServer";
 import prisma from "@/lib/client/prismaClient";
 import Image from "next/image";
-import { notFound, redirect } from "next/navigation";
-import { createTranslator, NextIntlClientProvider } from "next-intl";
+import { notFound } from "next/navigation";
+import { NextIntlClientProvider } from "next-intl";
 
 export const metadata = {
   title: "Fun social sports",

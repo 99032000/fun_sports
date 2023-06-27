@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next-intl/link";
 import type { Session } from "@supabase/supabase-js";
 import toast from "react-hot-toast";
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter, usePathname } from "next-intl/client";
 import type { user } from "@prisma/client";
 import { useTranslations } from "next-intl";
 import LocaleSwitcher from "./LocalSwitcher";

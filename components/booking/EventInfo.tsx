@@ -2,8 +2,8 @@ import { toLocalTimeString } from "@/utility/Date";
 import type { social_booking, social_event } from "@prisma/client";
 import ImageModal from "../dashboard/modals/ImageModal";
 import Image from "next/image";
-import { bookingInfo } from "@/lib/api";
 import SocialBookingsTable from "./SocialBookingsTable";
+
 function EventInfo({
   event,
   socialBookings,
