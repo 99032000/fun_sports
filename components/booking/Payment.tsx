@@ -5,7 +5,7 @@ import {
   socialBookUpdate,
 } from "@/lib/api";
 import { social_booking } from "@prisma/client";
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter, usePathname } from "next-intl/client";
 import { useMemo, useState } from "react";
 import toast from "react-hot-toast";
 import ImageUpload from "./ImageUpload";

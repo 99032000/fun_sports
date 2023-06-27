@@ -5,8 +5,8 @@ import { useEffect, useRef, useState } from "react";
 import SportsLevel from "../signUp/SportsLevelSelector";
 import HobbyDropDownList from "../signUp/HobbyDropDown";
 import toast from "react-hot-toast";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
+import { useRouter } from "next-intl/client";
+import Link from "next-intl/link";
 
 const Profile = ({
   user,

@@ -4,7 +4,7 @@
 import { event_group } from "@/lib/api";
 import type { social_booking, social_event, sports_type } from "@prisma/client";
 import Image from "next/image";
-import Link from "next/link";
+import Link from "next-intl/link";
 import { AiFillDelete, AiFillEdit } from "react-icons/ai";
 import ImageModal from "./modals/ImageModal";
 import { toLocalTimeString } from "@/utility/Date";

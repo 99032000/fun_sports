@@ -5,7 +5,7 @@ import type {
   social_event,
   sports_type,
 } from "@prisma/client";
-import Link from "next/link";
+import Link from "next-intl/link";
 import OrganizationCard from "./OrganizationCard";
 import EventCard from "./EventCard";
 

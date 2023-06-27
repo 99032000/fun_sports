@@ -1,11 +1,11 @@
 "use client";
 import { useState, useRef } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next-intl/client";
 import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { emailSchema, passwordSchema } from "@/utility/ZodFormat";
 import toast from "react-hot-toast";
 import Image from "next/image";
-import Link from "next/link";
+import Link from "next-intl/link";
 const Login = ({ redirectUrl }: { redirectUrl: string | undefined }) => {
   const emailRef = useRef<HTMLInputElement | null>(null);
   const passwordRef = useRef<HTMLInputElement | null>(null);

@@ -3,7 +3,7 @@
 import { upsertOrganization, upsertOrganizationBody } from "@/lib/api";
 import type { sports_type } from "@prisma/client";
 import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next-intl/client";
 import { useRef, useState } from "react";
 import { toast } from "react-hot-toast";
 type props = {

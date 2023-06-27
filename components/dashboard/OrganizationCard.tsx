@@ -3,7 +3,7 @@
 
 import { deleteOrganization } from "@/lib/api";
 import type { organization, sports_type } from "@prisma/client";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next-intl/client";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { AiFillDelete, AiFillEdit } from "react-icons/ai";
