@@ -17,11 +17,11 @@ export async function GET(req: NextRequest, res: NextResponse) {
       })
       , { status: 200 });
   } catch (error: any) {
-    return new Response(JSON.stringify(JSON.stringify({
+    return new Response(JSON.stringify({
       success: false,
       data: null,
       error,
-    })), { status: 400 });
+    }), { status: 400 });
   }
 
 }

@@ -6,11 +6,22 @@ import {
 } from "@/lib/api";
 import { social_booking } from "@prisma/client";
 import { useRouter, usePathname } from "next-intl/client";
-import { useMemo, useState } from "react";
+import { Suspense, useEffect, useMemo, useState } from "react";
 import toast from "react-hot-toast";
 import ImageUpload from "./ImageUpload";
 import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import SocialBookingTable from "../common/SocialBookingTable";
+import {
+  Appearance,
+  StripeElementsOptions,
+  loadStripe,
+} from "@stripe/stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
+import CheckoutForm from "./CheckoutForm";
+
+const stripePromise = loadStripe(
+  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
+);
 
 function Payment({ socialBooking }: { socialBooking: social_booking }) {
   const [supabase] = useState(() => createBrowserSupabaseClient());
@@ -19,6 +30,29 @@ function Payment({ socialBooking }: { socialBooking: social_booking }) {
   const bookingInfo = socialBooking.booking_info as bookingInfo[];
   const [images, setImages] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
+  //------Stripe tools--------------------------------
+  const [clientSecret, setClientSecret] = useState("");
+
+  useEffect(() => {
+    // Create PaymentIntent as soon as the page loads
+    fetch("/api/stripe/create-payment-intent", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ items: [{ id: "xl-tshirt" }] }),
+    })
+      .then((res) => res.json())
+      .then((data) => setClientSecret(data.clientSecret));
+  }, []);
+
+  const appearance: Appearance = {
+    theme: "stripe",
+  };
+  const options: StripeElementsOptions = {
+    clientSecret,
+    appearance,
+  };
+
+  //----------------------------------------------------------------
   const totalPrice = useMemo(() => {
     let price = 0;
     bookingInfo.forEach((item) => {
@@ -91,6 +125,13 @@ function Payment({ socialBooking }: { socialBooking: social_booking }) {
       <h1>Payment</h1>
 
       <ImageUpload images={images} setImages={setImages} />
+      <Suspense fallback={<h2 className=" text-2xl text-black">Loading...</h2>}>
+        {clientSecret && (
+          <Elements options={options} stripe={stripePromise}>
+            <CheckoutForm />
+          </Elements>
+        )}
+      </Suspense>
       <div className="flex gap-4 mt-8 justify-end">
         <button
           className="btn btn-primary text-white btn-sm md:btn-md"
