@@ -1,5 +1,5 @@
 "use client";
-import Link from "next/link";
+import Link from "next-intl/link";
 import { useRef, useState } from "react";
 import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import toast from "react-hot-toast";
@@ -7,10 +7,9 @@ import { getUserByEmail } from "@/lib/api";
 import { emailSchema, passwordSchema } from "@/utility/ZodFormat";
 import type { sports_type } from "@prisma/client";
 import SportsLevel from "./SportsLevelSelector";
-import { AiOutlinePlus } from "react-icons/ai";
 import { updateUser } from "@/lib/api";
 import type { updateUserBody, hobby_type } from "@/lib/api";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next-intl/client";
 import HobbyDropDownList from "./HobbyDropDown";
 
 const Page = ({ sports_types }: { sports_types: sports_type[] }) => {
@@ -25,8 +24,6 @@ const Page = ({ sports_types }: { sports_types: sports_type[] }) => {
   const [hobbyList, setHobbyList] = useState<hobby_type[]>([]);
   const [supabase] = useState(() => createBrowserSupabaseClient());
   const router = useRouter();
-  // auth variables
-  // const session = supabase.auth.getSession();
   const auth = supabase.auth;
 
   // sign up function

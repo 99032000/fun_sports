@@ -1,0 +1,25 @@
+{
+  "navigation":{
+    "home": "Home",
+    "myEvent": "My Event",
+    "myBooking":"My Booking",
+    "contactMe":"Contact me",
+    "profile": "Profile",
+    "dashboard":"Dashboard",
+    "signout":"Sign out"
+  },
+  "localeSwitcher":{
+    "label": "Change language",
+    "locale":"{locale, select, cn {中文} en {English} other {Unknown}}"
+  },
+  "home":{
+    "book":{
+      "book":"Book Now",
+      "bookInfo":"Booking Information",
+      "eventInfo":"Event Information",
+      "bookNow":"Book Now",
+      "choose":"Choose",
+      "payment":"Payment"
+    }
+  }
+}

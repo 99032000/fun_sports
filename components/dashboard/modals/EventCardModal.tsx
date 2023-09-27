@@ -1,5 +1,5 @@
 import { deleteEvent } from "@/lib/api";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next-intl/client";
 import { useState } from "react";
 import toast from "react-hot-toast";
 

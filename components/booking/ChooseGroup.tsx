@@ -1,8 +1,9 @@
 import { Dispatch, SetStateAction, useState } from "react";
 import { event_group, bookingInfo, bookEvent } from "@/lib/api";
 import toast from "react-hot-toast";
-import { useRouter } from "next/navigation";
-import { social_booking } from "@prisma/client";
+import { useRouter } from "next-intl/client";
+import type { social_booking } from "@prisma/client";
+import { useTranslations } from "next-intl";
 function ChooseGroup({
   groups,
   eventId,
@@ -14,6 +15,7 @@ function ChooseGroup({
   setStep: Dispatch<SetStateAction<number>>;
   setSocialBook: Dispatch<SetStateAction<social_booking | undefined>>;
 }) {
+  const t = useTranslations("home.book");
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [bookingInfo, setBookingInfo] = useState<bookingInfo[]>([]);
@@ -102,7 +104,7 @@ function ChooseGroup({
           onClick={bookOnClick}
         >
           {loading && <span className="loading loading-spinner"></span>}
-          Book
+          {t("book")}
         </button>
       </div>
     </div>

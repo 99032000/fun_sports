@@ -5,7 +5,7 @@ import { event_group, upsertEvent, upsertEventBody } from "@/lib/api";
 import { hoursList, minsList } from "@/utility/Date";
 import type { social_event } from "@prisma/client";
 import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next-intl/client";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "react-hot-toast";
 import Datepicker from "react-tailwindcss-datepicker";

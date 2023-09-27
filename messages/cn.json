@@ -1,0 +1,25 @@
+{
+  "navigation":{
+    "home": "首页",
+    "myEvent": "活动",
+    "myBooking":"预定",
+    "contactMe":"联系我",
+    "profile": "用户信息",
+    "dashboard":"用户中心",
+    "signout":"登出"
+  },
+  "localeSwitcher":{
+    "label": "更改语言",
+    "locale":"{locale, select, cn {中文} en {English} other {Unknown}}"
+  },
+  "home":{
+    "book":{
+      "book":"猛猛定",
+      "bookInfo":"预定信息",
+      "eventInfo":"活动信息",
+      "bookNow":"预定",
+      "choose":"选择",
+      "payment":"付款"
+    }
+  }
+}

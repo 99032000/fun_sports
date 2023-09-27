@@ -1,10 +1,13 @@
 /* eslint-disable @next/next/no-img-element */
+"use client";
 import { AiOutlineCheckCircle } from "react-icons/ai";
 import type { eventHome } from "./Home";
 import { toLocalTimeString } from "@/utility/Date";
-import Link from "next/link";
+import Link from "next-intl/link";
+import { useTranslations } from "next-intl";
 
 function EventCard({ event }: { event: eventHome }) {
+  const t = useTranslations("home.book");
   return (
     <div className="card w-full md:w-3/5 max-w-3xl shadow-xl bg-base-100 bg-opacity-90">
       <div className="card-body">
@@ -53,7 +56,7 @@ function EventCard({ event }: { event: eventHome }) {
         </div>
         <div className="card-actions justify-end mt-4">
           <Link href={`/booking/${event.id}`}>
-            <button className="btn btn-accent">Book Now</button>
+            <button className="btn btn-accent">{t("book")}</button>
           </Link>
         </div>
       </div>

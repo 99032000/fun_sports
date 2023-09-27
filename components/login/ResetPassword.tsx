@@ -1,6 +1,6 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next-intl/client";
 import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { useSupabase } from "@/components/providers/supabase-provider";
 import { passwordSchema } from "@/utility/ZodFormat";
