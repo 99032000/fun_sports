@@ -1,5 +1,5 @@
 import { createServerClient } from "@/lib/client/supabaseServer";
-import { redirect } from "next/navigation";
+import {redirect} from 'next-intl/server';
 import Login from "@/components/login/Login";
 const Page = async () => {
   const supabase = createServerClient();

@@ -1,5 +1,5 @@
 import { getSession } from "@/lib/client/supabaseServer";
-import { redirect } from "next/navigation";
+import {redirect} from 'next-intl/server';;
 export default async function DashboardLayout({
   children, // will be a page or nested layout
 }: {

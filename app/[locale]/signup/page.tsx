@@ -1,7 +1,7 @@
 import SignUp from "@/components/signUp/SignUp";
 import prisma from "@/lib/client/prismaClient";
 import { createServerClient } from "@/lib/client/supabaseServer";
-import { redirect } from "next/navigation";
+import {redirect} from 'next-intl/server';
 const Page = async () => {
   const supabase = createServerClient();
   const {

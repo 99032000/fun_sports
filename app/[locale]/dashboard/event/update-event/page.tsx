@@ -1,5 +1,5 @@
 import prisma from "@/lib/client/prismaClient";
-import { redirect } from "next/navigation";
+import {redirect} from 'next-intl/server';
 import UpdateEvent from "@/components/dashboard/UpdateEvent";
 const Page = async ({
   searchParams,
